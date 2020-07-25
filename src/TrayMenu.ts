@@ -10,11 +10,16 @@ class TrayMenu {
         submenu: []
     }
 
-    constructor() { }
-
-    updatePlayerMenu(subMenuItems: any[] = []) {
+    updateRecentlyPlayedMenu(subMenuItems: any[] = []) {
         this.recentlyPlayedMenu = {
             label: this.recentlyPlayedLabel,
+            submenu: subMenuItems
+        };
+    }
+
+    updateInviteGroupMenu(subMenuItems: any[] = []) {
+        this.inviteGroupMenu = {
+            label: this.inviteGroupLabel,
             submenu: subMenuItems
         };
     }
@@ -27,4 +32,4 @@ class TrayMenu {
     }
 }
 
-export default TrayMenu;
+module.exports = TrayMenu;

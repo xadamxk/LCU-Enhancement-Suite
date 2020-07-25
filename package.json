@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --watch 'src/**/*.ts' --exec yarn start",
-    "build": "tsc --listfiles",
+    "build": "tsc --listfiles && copyfiles -u 1 src/assets/*.png dist",
     "start": "electron dist/."
   },
   "author": "xadamxk",
@@ -18,6 +18,7 @@
   },
   "devDependencies": {
     "@types/node": "^14.0.26",
+    "copyfiles": "^2.3.0",
     "electron": "^9.1.1",
     "nodemon": "^2.0.4",
     "typescript": "^3.9.7"

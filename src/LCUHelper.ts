@@ -9,7 +9,6 @@ class LCUHelper {
     connectionInfo: Object;
     constructor(connectorInfo: Object) {
         this.connectionInfo = new LCUConnection(connectorInfo);
-        console.log(this.connectionInfo);
     }
 
     getInfo() {
