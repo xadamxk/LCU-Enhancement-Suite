@@ -13,7 +13,7 @@ let tray = null;
 // TODO: Trigger context menu update when game is done loaded - how?
 
 app.whenReady().then(() => {
-    tray = new Tray('assets/icon.png');
+    tray = new Tray('../assets/icon.png');
     const contextMenu = Menu.buildFromTemplate([])
     tray.setToolTip('This is my application.')
     tray.setContextMenu(contextMenu);

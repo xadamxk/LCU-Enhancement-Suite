@@ -1,6 +1,0 @@
-import { constants } from "buffer";
-
-declare module "*.png" {
-    const content: any;
-    export default content;
-}
