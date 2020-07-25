@@ -1,36 +1,36 @@
+export { };
 // Node Imports
 const LCUConnector = require('lcu-connector');
 const { app, Menu, Tray } = require('electron')
 const getJSONValue = require('lodash/get');
 
 const LCUHelper = require("./LCUHelper");
+const TrayMenu = require("./TrayMenu");
+const nativeImage = require('electron').nativeImage
 
 const connector = new LCUConnector();
+const trayMenu = new TrayMenu();
 const log = console.log;
-let currentLCUHelperInstance = null;
-let tray = null;
+let tray: typeof Tray = null;
 
 // TODO: Trigger context menu update when game is done loaded - how?
-
 app.whenReady().then(() => {
-    tray = new Tray('../assets/icon.png');
-    const contextMenu = Menu.buildFromTemplate([])
+    tray = new Tray(nativeImage.createEmpty());
+    const contextMenu = Menu.buildFromTemplate(trayMenu.getMenu());
     tray.setToolTip('This is my application.')
     tray.setContextMenu(contextMenu);
-    //
-    // Run
+    // Connect
     connector.start();
-    connector.on('connect', (connectorInfo) => {
+    connector.on('connect', (connectorInfo: any) => {
         let lcuHelper = new LCUHelper(connectorInfo);
         log(`Found active client instance. Loading instance (${lcuHelper.getCreds()})`)
-        currentLCUHelperInstance = lcuHelper;
         getRecentlyPlayed(lcuHelper);
     });
 })
 
-function getRecentlyPlayed(lcuHelper) {
+function getRecentlyPlayed(lcuHelper: any) {
     lcuHelper.getRecentlyPlayed()
-        .then(response => {
+        .then((response: any) => {
             const statusCode = getJSONValue(response, "status");
             const data = getJSONValue(response, "data");
             switch (statusCode) {
@@ -41,17 +41,16 @@ function getRecentlyPlayed(lcuHelper) {
         })
 }
 
-function updateTray(data, lcuHelper) {
+function updateTray(data: any, lcuHelper: any) {
     // Sort by most recent
-    data = data.sort((a, b) => (Date.parse(a["gameCreationDate"]) < Date.parse(b["gameCreationDate"])) ? 1 : -1);
+    data = data.sort((a: any, b: any) => (Date.parse(a["gameCreationDate"]) < Date.parse(b["gameCreationDate"])) ? 1 : -1);
     // Keep the newest duplicate
-    data = data.filter((item, index) => {
+    data = data.filter((item: any, index: any) => {
         return data.indexOf(item) >= index;
     })
     data = data.slice(0, 20);
     // Create array of menu items
-    // TODO: Add logic for champion icon (dataURL = base64)
-    let items = data.map((player) => {
+    let items = data.map((player: any) => {
         return {
             id: player["summonerId"],
             help: lcuHelper,
@@ -61,21 +60,15 @@ function updateTray(data, lcuHelper) {
             click: handleClick
         }
     })
-    // TODO: Make a method that adds a seperator between different times
-    items = addItemEvery(items, { type: "separator" }, 9);
     // Update context menu
-    const contextMenu = Menu.buildFromTemplate([{ label: "Recently Played", submenu: items }])
+    trayMenu.updateRecentlyPlayedMenu(items)
+    const contextMenu = Menu.buildFromTemplate(trayMenu.getMenu())
     tray.setContextMenu(contextMenu);
 }
 
-function buildContextMenu() {
-
-}
-
-
-function handleClick(menuItem) {
+function handleClick(menuItem: any) {
     menuItem["help"].sendInvite(menuItem["id"])
-        .then(response => {
+        .then((response: any) => {
             const statusCode = getJSONValue(response, "status");
             const data = getJSONValue(response, "data");
             switch (statusCode) {
@@ -87,8 +80,9 @@ function handleClick(menuItem) {
 }
 
 // https://stackoverflow.com/a/3177838
-function timeSince(date) {
-    var seconds = Math.floor((new Date() - date) / 1000);
+function timeSince(date: any) {
+    let now: any = new Date();
+    var seconds = Math.floor((now - date) / 1000);
     var interval = Math.floor(seconds / 31536000);
     if (interval > 1) {
         return interval + " years ago";
@@ -113,7 +107,7 @@ function timeSince(date) {
 }
 
 // https://stackoverflow.com/a/48288237
-function addItemEvery(arr, item, frequency, starting = 0) {
+function addItemEvery(arr: any[], item: any, frequency: number, starting: number = 0) {
     for (var i = 0, a = []; i < arr.length; i++) {
         a.push(arr[i]);
         if ((i + 1 + starting) % frequency === 0) {
