@@ -88,9 +88,24 @@ class LCUHelper {
             });
     }
 
-    async sendInvite(summonerId: String) {
+    async sendInvite(summonerIds: any[]) {
+        const invitees = summonerIds.map((summonerId: number) => {
+            return { "toSummonerId": summonerId }
+        })
         return await axios.post(this.getBaseUrl() + "/lol-lobby/v2/lobby/invitations",
-            [{ "toSummonerId": summonerId }],
+            invitees,
+            this.getRequestOptions()
+        )
+            .then(function (response: any) {
+                return response;
+            })
+            .catch(function (error: { [x: string]: any; }) {
+                return error["response"];
+            });
+    }
+
+    async getFriends() {
+        return await axios.get(this.getBaseUrl() + "/lol-chat/v1/friends",
             this.getRequestOptions()
         )
             .then(function (response: any) {

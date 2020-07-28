@@ -30,4 +30,4 @@ app.whenReady().then(() => {
         const inviteGroup = new InviteGroup(lcuHelper, trayMenu);
 
     });
-})
+});
