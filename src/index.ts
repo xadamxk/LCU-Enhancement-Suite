@@ -11,8 +11,8 @@ const nativeImage = require('electron').nativeImage
 const connector = new LCUConnector();
 const log = console.log;
 //let tray: typeof Tray = null;
-import { RecentlyPlayed } from "./RecentlyPlayed";
-import { InviteGroup } from "./InviteGroup";
+import { RecentlyPlayed } from "./modules/RecentlyPlayed";
+import { InviteGroup } from "./modules/InviteGroup";
 
 // TODO: Trigger context menu update when game is done loaded - how?
 app.whenReady().then(() => {
