@@ -1,27 +1,36 @@
+const { Tray, Menu } = require('electron')
+
 class TrayMenu {
-    private recentlyPlayedLabel: string = "Recently Played";
+    private tray: typeof Tray = null;
     private recentlyPlayedMenu: Object = {
-        label: this.recentlyPlayedLabel,
+        label: "",
         submenu: []
     }
-    private inviteGroupLabel: string = "Invite By Group";
     private inviteGroupMenu: Object = {
-        label: this.inviteGroupLabel,
+        label: "",
         submenu: []
     }
 
-    updateRecentlyPlayedMenu(subMenuItems: any[] = []) {
+    constructor(tray: typeof Tray) {
+        this.tray = tray;
+    }
+
+    updateRecentlyPlayedMenu(label: string, subMenuItems: any[] = []) {
         this.recentlyPlayedMenu = {
-            label: this.recentlyPlayedLabel,
+            label: label,
             submenu: subMenuItems
         };
     }
 
-    updateInviteGroupMenu(subMenuItems: any[] = []) {
+    updateInviteGroupMenu(label: string, subMenuItems: any[] = []) {
         this.inviteGroupMenu = {
-            label: this.inviteGroupLabel,
+            label: label,
             submenu: subMenuItems
         };
+    }
+
+    updateTray(contextMenu: typeof Menu) {
+        this.tray.setContextMenu(contextMenu);
     }
 
     getMenu() {

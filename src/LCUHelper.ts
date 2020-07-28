@@ -5,8 +5,10 @@ const getJSONValue = require('lodash/get');
 // 
 const LCUConnection = require('./LCUConnection');
 
+//TODO: Refactor how API gets called (all the same code)
+
 class LCUHelper {
-    connectionInfo: Object;
+    private connectionInfo: Object;
     constructor(connectorInfo: Object) {
         this.connectionInfo = new LCUConnection(connectorInfo);
     }
@@ -64,6 +66,18 @@ class LCUHelper {
 
     async getRecentlyPlayed() {
         return await axios.get(this.getBaseUrl() + "/lol-match-history/v1/recently-played-summoners",
+            this.getRequestOptions()
+        )
+            .then(function (response: any) {
+                return response;
+            })
+            .catch(function (error: { [x: string]: any; }) {
+                return error["response"];
+            });
+    }
+
+    async getInviteGroups() {
+        return await axios.get(this.getBaseUrl() + "/lol-chat/v1/friend-groups",
             this.getRequestOptions()
         )
             .then(function (response: any) {
