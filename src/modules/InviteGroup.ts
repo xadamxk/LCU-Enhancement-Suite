@@ -1,5 +1,5 @@
 const { Menu } = require('electron')
-const LCUHelper = require("./LCUHelper");
+const LCUHelper = require("../LCUHelper");
 const getJSONValue = require('lodash/get');
 const log = console.log;
 
@@ -34,17 +34,56 @@ class InviteGroup {
 
   // TODO: Type for array entry
   parseData(data: any[]) {
-    let groups = data.map((group: any) => {
-      // TODO: Filter OFFLINE, **Default
-      return {
-        id: group["name"],
-        label: group["name"],
-        subLabel: "-",
-        type: "normal"
+    const blacklist = ["MOBILE", "OFFLINE"];
+    const onlineGroup = "**Default";
+    // Remove blacklisted groups
+    let groups = data.reduce((filtered, group) => {
+      const groupName = group["name"];
+      if (!blacklist.includes(groupName)) {
+        let name = groupName == onlineGroup ? "General" : groupName;
+        filtered.push({
+          id: groupName,
+          label: name,
+          subLabel: "-",
+          type: "normal",
+          click: this.handleClick,
+          this: this
+        })
       }
-    })
-    log(groups);
+      return filtered;
+    }, []);
+
     this.updateTray(groups)
+  }
+
+  handleClick(menuItem: any) {
+    const friendGroupId = menuItem["id"];
+    menuItem["this"].lcuHelper.getFriends()
+      .then((response: any) => {
+        const statusCode = getJSONValue(response, "status");
+        const data = getJSONValue(response, "data");
+        switch (statusCode) {
+          case 200: menuItem["this"].filterFriends(data, friendGroupId);
+            break;
+          default: log("Failed to fetch friends...")
+        }
+      })
+  }
+
+  filterFriends(friends: any[], friendGroupId: string) {
+    const availabilityBlacklist = ["mobile", "dnd"]
+    // Filter by group, status, game, and patch
+    friends = friends.filter((friend: any) => {
+      return friend["groupName"] == friendGroupId &&
+        friend["product"] == "league_of_legends" &&
+        friend["patchline"] == "live" &&
+        !availabilityBlacklist.includes(friend["availability"])
+    })
+    // Create array of menu items
+    let summonerIds = friends.map((player: any) => {
+      return player["summonerId"]
+    })
+    this.lcuHelper.sendInvite(summonerIds);
   }
 
   updateTray(groups: any[]) {

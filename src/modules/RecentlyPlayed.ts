@@ -1,5 +1,5 @@
 const { Menu } = require('electron')
-const LCUHelper = require("./LCUHelper");
+const LCUHelper = require("../LCUHelper");
 const getJSONValue = require('lodash/get');
 const log = console.log;
 
@@ -48,7 +48,8 @@ class RecentlyPlayed {
         label: player["summonerName"],
         sublabel: "Seen: " + this.timeSince(new Date(player["gameCreationDate"])),
         type: "normal",
-        click: this.handleClick
+        click: this.handleClick,
+        this: this
       }
     });
     this.updateTray(items)
@@ -61,7 +62,7 @@ class RecentlyPlayed {
   }
 
   handleClick(menuItem: any) {
-    this.lcuHelper.sendInvite(menuItem["id"])
+    menuItem["this"].lcuHelper.sendInvite([menuItem["id"]])
       .then((response: any) => {
         const statusCode = getJSONValue(response, "status");
         const data = getJSONValue(response, "data");
