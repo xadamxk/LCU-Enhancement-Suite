@@ -59,9 +59,8 @@ class RecentlyPlayed {
 
   addSpacer(recentlyPlayedItems: any[]) {
     recentlyPlayedItems.forEach((item, index) => {
-      if (index > 0 &&
-        item["seen"] && recentlyPlayedItems[index - 1]["seen"] &&
-        recentlyPlayedItems[index]["seen"] !== recentlyPlayedItems[index - 1]["seen"]) {
+      let previousPlayer = recentlyPlayedItems[index - 1];
+      if (index > 0 && item["seen"] && previousPlayer["seen"] && item["seen"] !== previousPlayer["seen"]) {
         recentlyPlayedItems.splice(index, 0, { type: "separator" });
       }
     })
