@@ -1,5 +1,3 @@
-import { group } from "console";
-
 const { Menu } = require('electron')
 const LCUHelper = require("../LCUHelper");
 const getJSONValue = require('lodash/get');
