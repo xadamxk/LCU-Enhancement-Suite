@@ -37,11 +37,11 @@ class InviteGroup {
     const blacklist = ["MOBILE", "OFFLINE"];
     const onlineGroup = "**Default";
     // Remove blacklisted groups
-    let groups = data.reduce((filtered, group) => {
+    let groups = data.reduce((filteredGroups, group) => {
       const groupName = group["name"];
       if (!blacklist.includes(groupName)) {
         let name = groupName == onlineGroup ? "General" : groupName;
-        filtered.push({
+        filteredGroups.push({
           id: groupName,
           label: name,
           subLabel: "-",
@@ -50,8 +50,17 @@ class InviteGroup {
           this: this
         })
       }
-      return filtered;
+      return filteredGroups;
     }, []);
+    // Add all friends at beginning
+    groups.unshift({
+      id: "",
+      label: "All Friends",
+      subLabel: "-",
+      type: "normal",
+      click: this.handleClick,
+      this: this
+    });
 
     this.updateTray(groups)
   }
@@ -74,7 +83,7 @@ class InviteGroup {
     const availabilityBlacklist = ["mobile", "dnd"]
     // Filter by group, status, game, and patch
     friends = friends.filter((friend: any) => {
-      return friend["groupName"] == friendGroupId &&
+      return (friendGroupId == "" || friend["groupName"] == friendGroupId) &&
         friend["product"] == "league_of_legends" &&
         friend["patchline"] == "live" &&
         !availabilityBlacklist.includes(friend["availability"])

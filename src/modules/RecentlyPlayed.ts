@@ -33,26 +33,37 @@ class RecentlyPlayed {
   }
 
   // TODO: Type for array entry
-  parseData(data: any[]) {
+  parseData(recentlyPlayed: any[]) {
     // Sort by most recent
-    data = data.sort((a: any, b: any) => (Date.parse(a["gameCreationDate"]) < Date.parse(b["gameCreationDate"])) ? 1 : -1);
+    recentlyPlayed = recentlyPlayed.sort((a: any, b: any) => (Date.parse(a["gameCreationDate"]) < Date.parse(b["gameCreationDate"])) ? 1 : -1);
     // Keep the newest duplicate
-    data = data.filter((item: any, index: any) => {
-      return data.indexOf(item) >= index;
+    recentlyPlayed = recentlyPlayed.filter((item: any, index: any) => {
+      return recentlyPlayed.indexOf(item) >= index;
     })
-    data = data.slice(0, 20);
+    recentlyPlayed = recentlyPlayed.slice(0, 20);
     // Create array of menu items
-    let items = data.map((player: any) => {
+    let recentlyPlayedItems = recentlyPlayed.map((player: any) => {
       return {
         id: player["summonerId"],
         label: player["summonerName"],
         sublabel: "Seen: " + this.timeSince(new Date(player["gameCreationDate"])),
+        seen: player["gameCreationDate"],
         type: "normal",
         click: this.handleClick,
         this: this
       }
     });
-    this.updateTray(items)
+    this.addSpacer(recentlyPlayedItems);
+    this.updateTray(recentlyPlayedItems)
+  }
+
+  addSpacer(recentlyPlayedItems: any[]) {
+    recentlyPlayedItems.forEach((item, index) => {
+      let previousPlayer = recentlyPlayedItems[index - 1];
+      if (index > 0 && item["seen"] && previousPlayer["seen"] && item["seen"] !== previousPlayer["seen"]) {
+        recentlyPlayedItems.splice(index, 0, { type: "separator" });
+      }
+    })
   }
 
   updateTray(items: any[]) {
