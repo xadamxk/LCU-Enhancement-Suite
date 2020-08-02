@@ -4,7 +4,7 @@ const getJSONValue = require('lodash/get');
 const log = console.log;
 
 class InviteGroup {
-  private lcuHelper: LCUHelper;
+  private lcuHelper: typeof LCUHelper;
   private trayMenu: any;
   private label = "Invite Group";
   private menu: Object = {

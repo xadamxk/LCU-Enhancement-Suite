@@ -4,6 +4,7 @@ const axios = require('axios');
 const getJSONValue = require('lodash/get');
 // 
 const LCUConnection = require('./LCUConnection');
+import { EndPoints } from "./enums/EndPoints";
 
 //TODO: Refactor how API gets called (all the same code)
 
@@ -65,35 +66,27 @@ class LCUHelper {
     }
 
     async getRecentlyPlayed() {
-        return await axios.get(this.getBaseUrl() + "/lol-match-history/v1/recently-played-summoners",
-            this.getRequestOptions()
-        )
-            .then(function (response: any) {
-                return response;
-            })
-            .catch(function (error: { [x: string]: any; }) {
-                return error["response"];
-            });
+        return await this.get(EndPoints.RecentlyPlayedSummoners)
     }
 
     async getInviteGroups() {
-        return await axios.get(this.getBaseUrl() + "/lol-chat/v1/friend-groups",
-            this.getRequestOptions()
-        )
-            .then(function (response: any) {
-                return response;
-            })
-            .catch(function (error: { [x: string]: any; }) {
-                return error["response"];
-            });
+        return await this.get(EndPoints.FriendGroups);
     }
 
     async sendInvite(summonerIds: any[]) {
         const invitees = summonerIds.map((summonerId: number) => {
             return { "toSummonerId": summonerId }
         })
-        return await axios.post(this.getBaseUrl() + "/lol-lobby/v2/lobby/invitations",
-            invitees,
+        return await this.post(EndPoints.Invitations, invitees);
+    }
+
+    async getFriends() {
+        return await this.get(EndPoints.Friends);
+    }
+
+    async post(endpoint: string, data: object) {
+        return await axios.post(this.getBaseUrl() + endpoint,
+            data,
             this.getRequestOptions()
         )
             .then(function (response: any) {
@@ -104,8 +97,8 @@ class LCUHelper {
             });
     }
 
-    async getFriends() {
-        return await axios.get(this.getBaseUrl() + "/lol-chat/v1/friends",
+    async get(endpoint: string) {
+        return await axios.get(this.getBaseUrl() + endpoint,
             this.getRequestOptions()
         )
             .then(function (response: any) {

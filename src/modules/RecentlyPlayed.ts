@@ -4,7 +4,7 @@ const getJSONValue = require('lodash/get');
 const log = console.log;
 
 class RecentlyPlayed {
-  private lcuHelper: LCUHelper;
+  private lcuHelper: typeof LCUHelper;
   private trayMenu: any;
   private label = "Recently Played";
   private menu: Object = {
