@@ -1,0 +1,169 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "projects": {
+    "lcu-enhancement-suite": {
+      "root": "./",
+      "sourceRoot": "./src/angular/",
+      "projectType": "application",
+      "architect": {
+        "build": {
+          "builder": "@angular-builders/custom-webpack:browser",
+          "options": {
+            "outputPath": "./dist/angular/",
+            "index": "./src/angular/index.html",
+            "main": "./src/angular/main.ts",
+            "tsConfig": "./src/angular/tsconfig.app.json",
+            "polyfills": "./src/angular/polyfills.ts",
+            "assets": [
+              "./src/angular/assets/"
+            ],
+            "styles": [
+              "./src/angular/styles.scss"
+            ],
+            "scripts": [],
+            "customWebpackConfig": {
+              "path": "./src/angular/angular.webpack.js"
+            }
+          },
+          "configurations": {
+            "development": {
+              "optimization": false,
+              "outputHashing": "all",
+              "sourceMap": true,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": false,
+              "fileReplacements": [
+                {
+                  "replace": "./src/angular/environments/environment.ts",
+                  "with": "./src/angular/environments/environment.development.ts"
+                }
+              ]
+            },
+            "web": {
+              "optimization": false,
+              "outputHashing": "all",
+              "sourceMap": true,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": false,
+              "fileReplacements": [
+                {
+                  "replace": "./src/angular/environments/environment.ts",
+                  "with": "./src/angular/environments/environment.web.ts"
+                }
+              ]
+            },
+            "production": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "fileReplacements": [
+                {
+                  "replace": "./src/angular/environments/environment.ts",
+                  "with": "./src/angular/environments/environment.production.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-builders/custom-webpack:dev-server",
+          "options": {
+            "browserTarget": "lcu-enhancement-suite:build"
+          },
+          "configurations": {
+            "development": {
+              "browserTarget": "lcu-enhancement-suite:build:development"
+            },
+            "web": {
+              "browserTarget": "lcu-enhancement-suite:build:web"
+            },
+            "production": {
+              "browserTarget": "lcu-enhancement-suite:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "lcu-enhancement-suite:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-builders/custom-webpack:karma",
+          "options": {
+            "main": "./src/angular/test.ts",
+            "polyfills": "./src/angular/polyfills-test.ts",
+            "tsConfig": "./src/angular/tsconfig.spec.json",
+            "karmaConfig": "./src/angular/karma.conf.js",
+            "scripts": [],
+            "styles": [
+              "./src/angular/styles.scss"
+            ],
+            "assets": [
+              "./src/angular/assets/"
+            ],
+            "customWebpackConfig": {
+              "path": "./src/angular/angular.webpack.js"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "eslintConfig": "./.eslintrc.json",
+            "tsConfig": [
+              "./src/angular/tsconfig.app.json",
+              "./src/angular/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/"
+            ]
+          }
+        }
+      }
+    },
+    "lcu-enhancement-suite-e2e": {
+      "root": "e2e",
+      "projectType": "application",
+      "architect": {
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "eslintConfig": "./.eslintrc.json",
+            "tsConfig": [
+              "./e2e/tsconfig.e2e.json"
+            ],
+            "exclude": [
+              "**/node_modules/"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "lcu-enhancement-suite",
+  "schematics": {
+    "@schematics/angular:component": {
+      "prefix": "app",
+      "style": "scss"
+    },
+    "@schematics/angular:directive": {
+      "prefix": "app"
+    }
+  }
+}

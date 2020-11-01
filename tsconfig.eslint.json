@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.base.json",
+  "files": [
+    "./src/electron/watcher.ts",
+    "./src/angular/environments/environment.development.ts",
+    "./src/angular/environments/environment.production.ts",
+    "./src/angular/environments/environment.web.ts"
+  ]
+}

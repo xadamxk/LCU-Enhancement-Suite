@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "types": [
+      "node",
+      "jasmine"
+    ]
+  },
+  "files": [
+    "./test.ts",
+    "./polyfills-test.ts"
+  ],
+  "include": [
+    "**/*.spec.ts"
+  ]
+}

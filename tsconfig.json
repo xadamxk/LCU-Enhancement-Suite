@@ -1,20 +1,17 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "esModuleInterop": true,
-        "allowSyntheticDefaultImports": true,
-        "target": "es6",
-        "noImplicitAny": true,
-        "moduleResolution": "node",
-        "sourceMap": false,
-        "outDir": "./dist",
-        "rootDir": "./src",
-        "baseUrl": ".",
-        "paths": {
-            "*": [
-                "node_modules/*",
-                "src/types/*"
-            ]
-        }
+  "files": [],
+  "references": [
+    {
+      "path": "./src/angular/tsconfig.app.json"
+    },
+    {
+      "path": "./src/angular/tsconfig.spec.json"
+    },
+    {
+      "path": "./src/electron/tsconfig.electron.json"
+    },
+    {
+      "path": "./e2e/tsconfig.e2e.json"
     }
+  ]
 }

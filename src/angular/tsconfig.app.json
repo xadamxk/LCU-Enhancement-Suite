@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "files": [
+    "./main.ts",
+    "./polyfills.ts"
+  ],
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true,
+    "preserveWhitespaces": true
+  }
+}
