@@ -8,7 +8,7 @@ import { ReadyCheckSubscription } from '../subscriptions';
 
 export class AutoAcceptQueueModule extends WebsocketModule {
   id = 'AutoAcceptQueue';
-  checked = true;
+  checked = this.storage.get('checked', true);
 
   async register(): Promise<void> {
     connection.addSubscription(
@@ -23,6 +23,7 @@ export class AutoAcceptQueueModule extends WebsocketModule {
       checked: this.checked,
       click: (menuItem) => {
         this.checked = menuItem.checked = !this.checked;
+        this.storage.set('checked', this.checked);
       }
     });
 

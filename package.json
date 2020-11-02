@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "async-mutex": "0.2.4",
+    "electron-store": "6.0.1",
     "moment": "2.27.0",
     "node-fetch": "2.6.1",
     "ws": "7.3.1"
