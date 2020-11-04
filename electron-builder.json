@@ -1,0 +1,28 @@
+{
+  "productName": "lcu-enhancement-suite",
+  "directories": {
+    "buildResources": "./dist/electron/assets/",
+    "output": "./release/"
+  },
+  "files": [
+      "./dist/"
+  ],
+  "win": {
+    "icon": "./dist/electron/assets/icons/",
+    "target": [
+      "portable"
+    ]
+  },
+  "mac": {
+    "icon": "./dist/electron/assets/icons/",
+    "target": [
+      "dmg"
+    ]
+  },
+  "linux": {
+    "icon": "./dist/electron/assets/icons/",
+    "target": [
+      "AppImage"
+    ]
+  }
+}
