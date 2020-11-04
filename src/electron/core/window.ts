@@ -8,7 +8,7 @@ let window: BrowserWindow = null;
 export { window };
 
 const args = process.argv.slice(1);
-const serve = args.some(val => val === '--serve');
+const live = args.some(val => val === '--live');
 
 export function initWindow(): void {
   const size = screen.getPrimaryDisplay().workAreaSize;
@@ -22,7 +22,7 @@ export function initWindow(): void {
     height: height,
     webPreferences: {
       nodeIntegration: true,
-      allowRunningInsecureContent: serve,
+      allowRunningInsecureContent: live,
     },
   });
 
@@ -31,7 +31,7 @@ export function initWindow(): void {
     window.setIcon(path.join(app.getAppPath(), 'dist', 'electron', 'assets', 'icons', 'icon.png'));
   }
 
-  if (serve) {
+  if (live) {
     window.loadURL('http://localhost:4200');
   } else {
     window.loadURL(url.format({

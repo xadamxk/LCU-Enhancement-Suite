@@ -3,6 +3,8 @@ import * as spawn from 'cross-spawn';
 import * as path from 'path';
 import * as pstree from 'ps-tree';
 
+const args = process.argv.slice(2);
+
 let buildProcess = null;
 let electronProcess = null;
 let killCallback = null;
@@ -35,7 +37,7 @@ function runBuildProcess(): Promise<boolean> {
 
 function runElectronProcess(): Promise<boolean> {
   return new Promise((resolve, reject) => {
-    electronProcess = spawn('npm', ['run', 'electron', '.'], { stdio: 'inherit' });
+    electronProcess = spawn('npm', ['run', 'electron', '--', ...args], { stdio: 'inherit' });
 
     electronProcess.on('exit', (code: number, signal: string) => {
       electronProcess = null;
@@ -102,7 +104,7 @@ function finish(finished: boolean): void {
   }
 }
 
-const watcher = chokidar.watch(path.join(__dirname, 'electron', '**', '*.ts'), { ignored: [__filename] });
+const watcher = chokidar.watch(path.join(__dirname, '**', '*.ts'), { ignored: [__filename] });
 
 watcher.on('change', (path: string) => {
   console.log(`Change at ${path}.`);
