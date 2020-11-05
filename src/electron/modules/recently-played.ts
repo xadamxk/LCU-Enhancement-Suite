@@ -39,35 +39,28 @@ export class RecentlyPlayedModule extends WebsocketModule {
       const summoners = json.map((summoner: RecentlyPlayedSummoner) => new RecentlyPlayedSummoner(summoner));
 
       // sort newest first
-      const orderedSummoners = summoners.sort((summonerA: RecentlyPlayedSummoner, summonerB: RecentlyPlayedSummoner) => summonerB.gameCreationDate.diff(summonerA.gameCreationDate));
+      const sortedSummoners = summoners.sort((summonerA: RecentlyPlayedSummoner, summonerB: RecentlyPlayedSummoner) => summonerB.gameCreationDate.diff(summonerA.gameCreationDate));
 
       // keep newest duplicates
-      const uniqueSummoners = orderedSummoners.filter((summoner: RecentlyPlayedSummoner, index: number) => {
-        return orderedSummoners.findIndex((newestSummoner: RecentlyPlayedSummoner) => newestSummoner.summonerId === summoner.summonerId) === index;
+      const uniqueSummoners = sortedSummoners.filter((summoner: RecentlyPlayedSummoner, index: number) => {
+        return sortedSummoners.findIndex((newestSummoner: RecentlyPlayedSummoner) => newestSummoner.summonerId === summoner.summonerId) === index;
       }).slice(0, this.recentSummonerLimit);
 
-      // create object by game id
-      const summonersByGame = uniqueSummoners.reduce((acc, post) => {
-        const gameId = post.gameId;
-        if (gameId in acc) {
-          acc[gameId].push(post);
-        } else {
-          acc[gameId] = [post];
-        }
-        return { ...acc };
+      // group summoners by game
+      const summonersByGame = uniqueSummoners.reduce((summonersByGame: Record<number, RecentlyPlayedSummoner[]>, summoner: RecentlyPlayedSummoner) => {
+        summonersByGame[summoner.gameId] = summonersByGame[summoner.gameId] || [];
+        summonersByGame[summoner.gameId].push(summoner);
+        return summonersByGame;
       }, {});
 
-      // Append each unique player to recently played menu
-      // Reverse order of games to show most recent first
-      Object.entries(summonersByGame).reverse().map((playersByGame, index) => {
-        const gameEntry = <RecentlyPlayedSummoner[]>playersByGame[1];
-
-        gameEntry.forEach((summoner) => {
+      // reverse order of games to show most recent game first
+      Object.keys(summonersByGame).reverse().forEach((gameId, index, reversedGameIds) => {
+        // append each unique player in game
+        summonersByGame[gameId].forEach((summoner: RecentlyPlayedSummoner) => {
           submenu.append(new MenuItem({
             label: summoner.summonerName,
             sublabel: `Played: ${summoner.gameCreationDate.fromNow()}`,
-            type: 'normal',
-            click: async () => {
+            click: async() => {
               const response = await connection.inviteSummoners(summoner.summonerId);
               console.log(response.status);
               const json = await response.json();
@@ -75,9 +68,9 @@ export class RecentlyPlayedModule extends WebsocketModule {
             }
           }));
         });
-        // Append separator between games
-        // Exclude separator at end of menu
-        if (index + 1 < Object.keys(summonersByGame).length) {
+
+        // append separator between games
+        if (index + 1 < reversedGameIds.length) {
           submenu.append(new MenuItem({
             type: 'separator',
           }));
