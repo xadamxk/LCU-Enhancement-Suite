@@ -4,7 +4,7 @@ import { URLSearchParams } from 'url';
 import { LeagueCredentials } from './credentials';
 import { EventType, Method, Protocol } from './enums';
 import { LeagueEvent } from './event';
-import { readLockfile } from './util';
+import { readCertificateAuthority, readLockfile } from './util';
 import { LeagueWebSocket } from './websocket';
 
 export interface ILeagueConnection {
@@ -16,12 +16,18 @@ export interface ILeagueConnection {
 }
 
 export class LeagueConnection implements ILeagueConnection {
+  private certificateAuthority: string;
   private credentials: LeagueCredentials;
   private websocket: LeagueWebSocket;
 
   constructor() {
+    this.initCertificateAuthority();
     this.initCredentials();
     this.initWebSocket();
+  }
+
+  private initCertificateAuthority(): void {
+    this.certificateAuthority = readCertificateAuthority();
   }
 
   private initCredentials(): void {
@@ -42,7 +48,7 @@ export class LeagueConnection implements ILeagueConnection {
       headers: {
         Authorization: this.credentials.getBasicAuthHeader()
       },
-      rejectUnauthorized: false
+      ca: this.certificateAuthority
     });
   }
 
@@ -82,7 +88,7 @@ export class LeagueConnection implements ILeagueConnection {
 
     if (this.credentials.secure) {
       options.agent = new Agent({
-        rejectUnauthorized: false
+        ca: this.certificateAuthority
       });
     }
 
