@@ -16,6 +16,7 @@ declare module '../../connector' {
     addSubscription(subscription: Subscription): void;
     removeSubscription(subscription: Subscription): void
     inviteSummoners(...summonerIds: number[]): Promise<Response>
+    getLoot(): Promise<Response>
   }
 }
 
@@ -29,4 +30,8 @@ LeagueConnection.prototype.removeSubscription = function(this: LeagueConnection,
 
 LeagueConnection.prototype.inviteSummoners = async function(this: LeagueConnection, ...summonerIds: number[]): Promise<Response> {
   return await this.post(Endpoints.INVITATIONS, summonerIds.map((summonerId: number) => new Object({ 'toSummonerId': summonerId })));
+};
+
+LeagueConnection.prototype.getLoot = async function(this: LeagueConnection): Promise<Response> {
+  return await this.get(Endpoints.LOOT_MAP);
 };

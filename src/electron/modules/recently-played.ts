@@ -11,6 +11,7 @@ export class RecentlyPlayedModule extends WebsocketModule {
   recentSummonerLimit = 20;
 
   async register(): Promise<void> {
+    // TODO: Add subscription for call when client initially loads friends (ie. signing into different account)
     connection.addSubscription(
       new GameflowPhaseSubscription(() => {
         this.refresh();
