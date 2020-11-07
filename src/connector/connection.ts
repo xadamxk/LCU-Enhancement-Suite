@@ -1,6 +1,7 @@
 import { Agent } from 'https';
 import fetch, { RequestInit, Response } from 'node-fetch';
 import { URLSearchParams } from 'url';
+import { ClientOptions } from 'ws';
 import { LeagueCredentials } from './credentials';
 import { EventType, Method, Protocol } from './enums';
 import { LeagueEvent } from './event';
@@ -44,12 +45,17 @@ export class LeagueConnection implements ILeagueConnection {
   }
 
   private initWebSocket(): void {
-    this.websocket = new LeagueWebSocket(this.credentials.getWebSocketUrl(), {
+    const options: ClientOptions = {
       headers: {
         Authorization: this.credentials.getBasicAuthHeader()
-      },
-      ca: this.certificateAuthority
-    });
+      }
+    };
+
+    if (this.credentials.secure) {
+      options.ca = this.certificateAuthority;
+    }
+
+    this.websocket = new LeagueWebSocket(this.credentials.getWebSocketUrl(), options);
   }
 
   public subscribe(uri: string, eventType: EventType, listener: (event: LeagueEvent) => void): void {
