@@ -50,8 +50,8 @@ app.init = (trayOnly): void => {
         }
 
         app.emit('init-finished');
-      } catch (e) {
-        app.emit('init-error', e);
+      } catch (error) {
+        app.emit('init-error', error);
       }
     });
 

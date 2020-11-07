@@ -17,9 +17,12 @@ app.on('init-error', error => {
     options.detail = 'League Client was not found. Confirm the client is running.';
   } else if (error instanceof CredentialsNotFoundError) {
     options.detail = 'League Client credentials were not found. Restart the client.';
+  } else if (error instanceof Error) {
+    options.detail = error.message;
   }
 
   dialog.showMessageBoxSync(null, options);
+  app.quit();
 });
 
 app.on('init-finished', () => {
