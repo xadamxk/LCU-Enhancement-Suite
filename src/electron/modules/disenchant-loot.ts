@@ -52,6 +52,7 @@ export class DisenchantLootModule extends WebsocketModule {
   private async disenchantItem(lootCategoryFilter: LootCategories): Promise<void> {
     const prettyCategory = lootCategoryFilter.toLowerCase().replace('_',' ');
     const allLoot = await this.getLoot();
+
     const allCategoryLoot = Object.values(allLoot).filter((lootItem) => {
       return lootItem.displayCategories === lootCategoryFilter;
     });
@@ -77,14 +78,18 @@ export class DisenchantLootModule extends WebsocketModule {
         detail: 'This is PERMANANT and can NOT be undone.',
       };
 
+      // TODO: Add 2nd prompt
       const initialConfirmation = await dialog.showMessageBox(null, initialOptions);
       switch(initialConfirmation['response']){
         case 0: console.log('ALL');
+          this.disenchantLootItems(allCategoryLoot);
           break;
         case 1: console.log('OWNED');
+          this.disenchantLootItems(ownedCategoryLoot);
           break;
         case 2: console.log('CANCEL');
       }
+
     } else {
       const noResourceFoundOptions: MessageBoxOptions = {
         title: `No ${prettyCategory} shards found.`,
@@ -104,5 +109,21 @@ export class DisenchantLootModule extends WebsocketModule {
     return loot.reduce((total: number, lootItem: PlayerLoot) => {
       return total + lootItem.disenchantValue;
     }, 0);
+  }
+
+  private disenchantLootItems(loot: PlayerLoot[]): Promise<void>[] {
+    return loot.map((lootItem, index): Promise<void> => {
+      // TODO: Remove index condition after adding double prompt
+      if(index < 1){
+        return this.disenchantLootItem(lootItem.lootId, lootItem.type, lootItem.count);
+      }
+    });
+  }
+
+  private async disenchantLootItem(lootId: string, lootType: string, repeatCount: number): Promise<void> {
+    const disenchantResponse = await connection.disenchantLoot(lootId, lootType, repeatCount);
+    // TODO: error handling for non-200 response codes
+    console.log(disenchantResponse);
+    return await disenchantResponse.json();
   }
 }

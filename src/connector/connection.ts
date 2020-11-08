@@ -58,7 +58,7 @@ export class LeagueConnection implements ILeagueConnection {
     return this.request(uri, Method.GET);
   }
 
-  public async post(uri: string, body: Record<string, unknown> | Array<Record<string, any>> | URLSearchParams = null): Promise<Response> {
+  public async post(uri: string, body: Record<string, unknown> | Array<Record<string, any>> | string[] | URLSearchParams = null): Promise<Response> {
     return this.request(uri, Method.POST, body);
   }
 

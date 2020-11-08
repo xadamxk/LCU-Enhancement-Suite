@@ -17,6 +17,8 @@ declare module '../../connector' {
     removeSubscription(subscription: Subscription): void
     inviteSummoners(...summonerIds: number[]): Promise<Response>
     getLoot(): Promise<Response>
+    disenchantLoot(lootId: string, lootType: string, repeatCount: number): Promise<Response>
+    getBalance(): Promise<Response>
   }
 }
 
@@ -34,4 +36,14 @@ LeagueConnection.prototype.inviteSummoners = async function(this: LeagueConnecti
 
 LeagueConnection.prototype.getLoot = async function(this: LeagueConnection): Promise<Response> {
   return await this.get(Endpoints.LOOT_MAP);
+};
+
+// Example: /lol-loot/v1/recipes/CHAMPION_RENTAL_disenchant/craft?repeat=2
+// Body:    ["CHAMPION_SKIN_RENTAL_8003"]
+LeagueConnection.prototype.disenchantLoot = async function(this: LeagueConnection, lootId: string, lootType: string, repeatCount = 1): Promise<Response> {
+  return await this.post(Endpoints.LOOT_RECIPES.replace('{LOOTTYPE}', lootType).replace('{REPEAT}', repeatCount.toString()), [lootId]);
+};
+
+LeagueConnection.prototype.getBalance = async function(this: LeagueConnection) : Promise<Response> {
+  return await this.get(Endpoints.WALLET);
 };
