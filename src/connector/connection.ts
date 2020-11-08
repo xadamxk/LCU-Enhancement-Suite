@@ -1,10 +1,11 @@
 import { Agent } from 'https';
 import fetch, { RequestInit, Response } from 'node-fetch';
 import { URLSearchParams } from 'url';
+import { ClientOptions } from 'ws';
 import { LeagueCredentials } from './credentials';
 import { EventType, Method, Protocol } from './enums';
 import { LeagueEvent } from './event';
-import { readLockfile } from './util';
+import { readCertificateAuthority, readLockfile } from './util';
 import { LeagueWebSocket } from './websocket';
 
 export interface ILeagueConnection {
@@ -16,12 +17,18 @@ export interface ILeagueConnection {
 }
 
 export class LeagueConnection implements ILeagueConnection {
+  private certificateAuthority: string;
   private credentials: LeagueCredentials;
   private websocket: LeagueWebSocket;
 
   constructor() {
+    this.initCertificateAuthority();
     this.initCredentials();
     this.initWebSocket();
+  }
+
+  private initCertificateAuthority(): void {
+    this.certificateAuthority = readCertificateAuthority();
   }
 
   private initCredentials(): void {
@@ -38,12 +45,17 @@ export class LeagueConnection implements ILeagueConnection {
   }
 
   private initWebSocket(): void {
-    this.websocket = new LeagueWebSocket(this.credentials.getWebSocketUrl(), {
+    const options: ClientOptions = {
       headers: {
         Authorization: this.credentials.getBasicAuthHeader()
-      },
-      rejectUnauthorized: false
-    });
+      }
+    };
+
+    if (this.credentials.secure) {
+      options.ca = this.certificateAuthority;
+    }
+
+    this.websocket = new LeagueWebSocket(this.credentials.getWebSocketUrl(), options);
   }
 
   public subscribe(uri: string, eventType: EventType, listener: (event: LeagueEvent) => void): void {
@@ -82,7 +94,7 @@ export class LeagueConnection implements ILeagueConnection {
 
     if (this.credentials.secure) {
       options.agent = new Agent({
-        rejectUnauthorized: false
+        ca: this.certificateAuthority
       });
     }
 

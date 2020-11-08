@@ -11,6 +11,10 @@ module.exports = (env, argv) => {
     resolve: {
       extensions: [ '.tsx', '.ts', '.js' ],
     },
+    node: {
+      __dirname: false,
+      __filename: false
+    },
     optimization: {
       minimize: argv.mode === 'production',
       nodeEnv: false

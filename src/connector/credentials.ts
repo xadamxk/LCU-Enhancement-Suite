@@ -18,7 +18,9 @@ export class LeagueCredentials implements ILeagueCredentials {
   name: string;
   pid: number;
 
-  host = '127.0.0.1';
+  apiHost = '127.0.0.1'; // for some reason API authentication only works when the host is the IP address
+  websocketHost = 'localhost';  // ws.WebSocket will warn about DEP0123 if using IP address for TLS ServerName
+  host = this.apiHost; // the IP address should work for any purpose, but a deprecation warning may occur
   port: number;
   protocol: Protocol;
 
@@ -38,15 +40,15 @@ export class LeagueCredentials implements ILeagueCredentials {
   }
 
   public getApiUrl(path: string = null): string {
-    return this.getUrl(this.secure ? Protocol.HTTPS : Protocol.HTTP, path);
+    return this.getUrl(this.secure ? Protocol.HTTPS : Protocol.HTTP, this.apiHost, this.port, path);
   }
 
   public getWebSocketUrl(path: string = null): string {
-    return this.getUrl(this.secure ? Protocol.WSS : Protocol.WS, path);
+    return this.getUrl(this.secure ? Protocol.WSS : Protocol.WS, this.websocketHost, this.port, path);
   }
 
-  private getUrl(protocol: Protocol, path: string = null) : string {
-    let url = `${protocol}://${this.host}:${this.port}`;
+  private getUrl(protocol: Protocol, host: string, port: number, path: string = null) : string {
+    let url = `${protocol}://${host}:${port}`;
 
     if (path !== null) {
       path = path.replace(/^\/+/, '');
