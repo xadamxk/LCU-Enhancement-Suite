@@ -33,6 +33,16 @@
         "@angular-eslint/eslint-plugin"
       ],
       "rules": {
+        "@angular-eslint/use-injectable-provided-in": "error",
+        "@angular-eslint/no-attribute-decorator": "error",
+        "@typescript-eslint/no-var-requires": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-unsafe-call": "off",
+        "@typescript-eslint/no-unsafe-member-access": "off",
+        "@typescript-eslint/no-unsafe-assignment": "off",
+        "@typescript-eslint/no-unsafe-return": "off",
+        "@typescript-eslint/no-floating-promises": "off",
+        "indent": "off",
         "@typescript-eslint/indent": [
           "error", 2, {
             "SwitchCase": 1,
@@ -41,21 +51,25 @@
             "FunctionDeclaration": {"parameters": "first"}
           }
         ],
-        "@typescript-eslint/no-empty-function": 0,
-        "@typescript-eslint/no-var-requires": 0,
-        "@typescript-eslint/no-explicit-any": 0,
-        "@typescript-eslint/no-unsafe-call": 0,
-        "@typescript-eslint/no-unsafe-member-access": 0,
-        "@typescript-eslint/no-unsafe-assignment": 0,
-        "@typescript-eslint/no-unsafe-return": 0,
-        "@typescript-eslint/no-floating-promises": 0,
+        "no-empty-function": "off",
+        "@typescript-eslint/no-empty-function": "off",
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": "error",
+        "space-before-function-paren": "off",
         "@typescript-eslint/space-before-function-paren": ["error", "never"],
+        "semi": "off",
         "@typescript-eslint/semi": "error",
+        "quotes": "off",
         "@typescript-eslint/quotes": ["error", "single"],
-        "@angular-eslint/use-injectable-provided-in": "error",
-        "@angular-eslint/no-attribute-decorator": "error",
+        "comma-dangle": "off",
+        "@typescript-eslint/comma-dangle": "error",
+        "comma-spacing": "off",
+        "@typescript-eslint/comma-spacing": ["error"],
+        "keyword-spacing": "off",
+        "@typescript-eslint/keyword-spacing": ["error"],
         "eol-last": ["error", "always"],
-        "no-trailing-spaces": "error"
+        "no-trailing-spaces": "error",
+        "space-before-blocks": "error"
       }
     },
     {
