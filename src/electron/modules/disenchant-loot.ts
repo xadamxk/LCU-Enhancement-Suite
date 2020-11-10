@@ -80,7 +80,19 @@ export class DisenchantLootModule extends WebsocketModule {
   }
 
   private async disenchantChests(lootCategoryFilter: LootCategories, lootType: LootTypes): Promise<void> {
-    //
+    const prettyCategory = lootCategoryFilter.toLowerCase().replace('_',' ');
+    const allLoot = await this.getLoot();
+    console.log(allLoot);
+
+    const allCategoryLoot = Object.values(allLoot).filter((lootItem) => {
+      return lootItem[lootType] === lootCategoryFilter;
+    });
+
+    if(allCategoryLoot.length > 0){
+      //
+    } else {
+      this.showNoResourcesDialogue(prettyCategory);
+    }
   }
 
   private async disenchantShards(lootCategoryFilter: LootCategories, lootType: LootTypes): Promise<void> {
@@ -132,11 +144,7 @@ export class DisenchantLootModule extends WebsocketModule {
       }
 
     } else {
-      const noResourceFoundOptions: MessageBoxOptions = {
-        title: `No ${prettyCategory} shards found.`,
-        message: `It doesn't look like you have any ${prettyCategory} shards. \nCome back later when you do.`,
-      };
-      dialog.showMessageBox(null, noResourceFoundOptions);
+      this.showNoResourcesDialogue(prettyCategory);
     }
   }
 
@@ -163,5 +171,12 @@ export class DisenchantLootModule extends WebsocketModule {
     // TODO: error handling for non-200 response codes
     console.log(disenchantResponse);
     return await disenchantResponse.json();
+  }
+
+  private async showNoResourcesDialogue(prettyCategory: string): Promise<void> {
+    dialog.showMessageBox(null, {
+      title: `No ${prettyCategory} shards found.`,
+      message: `It doesn't look like you have any ${prettyCategory} shards. \nCome back later when you do.`,
+    });
   }
 }
