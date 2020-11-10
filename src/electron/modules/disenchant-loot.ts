@@ -1,8 +1,9 @@
+import { Console } from 'console';
 import { dialog, Dialog, Menu, MenuItem, MessageBoxOptions } from 'electron';
 import { StatusCode } from '../../connector';
 import { WebsocketModule } from '../api';
 import { connection } from '../core';
-import { Endpoints, LootCategories, LootItemStatus } from '../enums';
+import { Endpoints, LootCategories, LootItemStatus, LootTypes } from '../enums';
 import { PlayerLoot } from '../models';
 
 
@@ -24,11 +25,22 @@ export class DisenchantLootModule extends WebsocketModule {
 
     this.updateMenu(menuItem);
 
-    // LOGIC HERE
+    submenu.append(new MenuItem({
+      label: 'Champion Capsules',
+      type: 'normal',
+      click: async() => await this.disenchantChampionCapsules()
+    }));
+
     submenu.append(new MenuItem({
       label: 'Champion Shards',
       type: 'normal',
       click: async() => await this.disenchantChampionShards()
+    }));
+
+    submenu.append(new MenuItem({
+      label: 'Eternals Set Shards',
+      type: 'normal',
+      click: async() => await this.disenchantEternalShards()
     }));
 
     submenu.append(new MenuItem({
@@ -37,24 +49,47 @@ export class DisenchantLootModule extends WebsocketModule {
       click: async() => await this.disenchantSkinShards()
     }));
 
+    submenu.append(new MenuItem({
+      label: 'Ward Skin Shards',
+      type: 'normal',
+      click: async() => await this.disenchantWardSkinShards()
+    }));
+
     menuItem.sublabel = '';
     this.updateMenu(menuItem);
   }
 
-  async disenchantChampionShards(): Promise<void>{
-    return await this.disenchantItem(LootCategories.CHAMPION);
+  private async disenchantChampionCapsules(): Promise<void>{
+    return await this.disenchantChests(LootCategories.CHAMPION_CAPSULE, LootTypes.LOOT_ID);
   }
 
-  async disenchantSkinShards(): Promise<void> {
-    return await this.disenchantItem(LootCategories.SKIN);
+  private async disenchantChampionShards(): Promise<void>{
+    return await this.disenchantShards(LootCategories.CHAMPION, LootTypes.DISPLAY_CATEGORIES);
   }
 
-  private async disenchantItem(lootCategoryFilter: LootCategories): Promise<void> {
+  private async disenchantSkinShards(): Promise<void> {
+    return await this.disenchantShards(LootCategories.SKIN, LootTypes.DISPLAY_CATEGORIES);
+  }
+
+  private async disenchantWardSkinShards(): Promise<void> {
+    return await this.disenchantShards(LootCategories.WARD_SKIN, LootTypes.DISPLAY_CATEGORIES);
+  }
+
+  private async disenchantEternalShards(): Promise<void> {
+    return await this.disenchantShards(LootCategories.ETERNALS, LootTypes.DISPLAY_CATEGORIES);
+  }
+
+  private async disenchantChests(lootCategoryFilter: LootCategories, lootType: LootTypes): Promise<void> {
+    //
+  }
+
+  private async disenchantShards(lootCategoryFilter: LootCategories, lootType: LootTypes): Promise<void> {
     const prettyCategory = lootCategoryFilter.toLowerCase().replace('_',' ');
     const allLoot = await this.getLoot();
+    console.log(allLoot);
 
     const allCategoryLoot = Object.values(allLoot).filter((lootItem) => {
-      return lootItem.displayCategories === lootCategoryFilter;
+      return lootItem[lootType] === lootCategoryFilter;
     });
 
     // If resources are found, prompt all, owned, or cancel
@@ -65,7 +100,8 @@ export class DisenchantLootModule extends WebsocketModule {
             lootItem.itemStatus === LootItemStatus.OWNED;
       });
 
-      const initialOptions: MessageBoxOptions = {
+      // TODO: Debug why focus doesn't default to cancel
+      const promptOptions: MessageBoxOptions = {
         type: 'question',
         buttons: [
           `&All: ${allCategoryLoot.length} ${prettyCategory} shards (${this.totalDisenchantValue(allCategoryLoot)} essence)`,
@@ -75,19 +111,24 @@ export class DisenchantLootModule extends WebsocketModule {
         defaultId: 2, // Cancel
         cancelId: 2, // Cancel
         message: `What ${prettyCategory} shards would you like to disenchant?`,
-        detail: 'This is PERMANANT and can NOT be undone.',
+        detail: 'Select the checkbox below to confirm this action:',
+        checkboxChecked: false,
+        checkboxLabel: 'REQUIRED: I understand that this process is PERMANENT and can NOT be reverted.'
       };
 
-      // TODO: Add 2nd prompt
-      const initialConfirmation = await dialog.showMessageBox(null, initialOptions);
-      switch(initialConfirmation['response']){
-        case 0: console.log('ALL');
-          this.disenchantLootItems(allCategoryLoot);
-          break;
-        case 1: console.log('OWNED');
-          this.disenchantLootItems(ownedCategoryLoot);
-          break;
-        case 2: console.log('CANCEL');
+      const promptResponse = await dialog.showMessageBox(null, promptOptions);
+      if(promptResponse.checkboxChecked){
+        switch(promptResponse['response']){
+          // All
+          case 0:
+            this.disenchantLootItems(allCategoryLoot);
+            break;
+          // Owned
+          case 1:
+            this.disenchantLootItems(ownedCategoryLoot);
+            break;
+          case 2: break;
+        }
       }
 
     } else {
@@ -112,11 +153,8 @@ export class DisenchantLootModule extends WebsocketModule {
   }
 
   private disenchantLootItems(loot: PlayerLoot[]): Promise<void>[] {
-    return loot.map((lootItem, index): Promise<void> => {
-      // TODO: Remove index condition after adding double prompt
-      if(index < 1){
-        return this.disenchantLootItem(lootItem.lootId, lootItem.type, lootItem.count);
-      }
+    return loot.map((lootItem): Promise<void> => {
+      return this.disenchantLootItem(lootItem.lootId, lootItem.type, lootItem.count);
     });
   }
 
