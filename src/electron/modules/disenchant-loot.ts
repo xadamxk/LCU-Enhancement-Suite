@@ -89,7 +89,7 @@ export class DisenchantLootModule extends WebsocketModule {
     });
 
     if(allCategoryLoot.length > 0){
-      //
+      // TODO: Find endpoint to open champion capsule/chests
     } else {
       this.showNoResourcesDialogue(prettyCategory);
     }
