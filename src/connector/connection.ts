@@ -58,11 +58,11 @@ export class LeagueConnection implements ILeagueConnection {
     return this.request(uri, Method.GET);
   }
 
-  public async post(uri: string, body: Record<string, unknown> | Array<Record<string, any>> | string[] | URLSearchParams = null): Promise<Response> {
+  public async post(uri: string, body: Record<string | number, unknown> | Array<Record<string | number, unknown>> | Array<unknown> | URLSearchParams = null): Promise<Response> {
     return this.request(uri, Method.POST, body);
   }
 
-  public async request(uri: string, method: Method, body: Record<string, any> | Array<Record<string, any>> | URLSearchParams = null): Promise<Response> {
+  public async request(uri: string, method: Method, body: Record<string | number, unknown> | Array<Record<string | number, unknown>> | Array<unknown> | URLSearchParams = null): Promise<Response> {
     const options: RequestInit = {
       method,
       headers: {
