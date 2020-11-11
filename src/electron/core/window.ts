@@ -22,8 +22,8 @@ export function initWindow(): void {
     height: height,
     webPreferences: {
       nodeIntegration: true,
-      allowRunningInsecureContent: live,
-    },
+      allowRunningInsecureContent: live
+    }
   });
 
   // Set icon when running developmentally.

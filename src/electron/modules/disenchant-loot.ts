@@ -55,11 +55,11 @@ export class DisenchantLootModule extends Module {
     this.updateMenu(menuItem);
   }
 
-  private async disenchantChampionCapsules(): Promise<void>{
+  private async disenchantChampionCapsules(): Promise<void> {
     return await this.disenchantChests(LootCategories.CHAMPION_CAPSULE, LootTypes.LOOT_ID);
   }
 
-  private async disenchantChampionShards(): Promise<void>{
+  private async disenchantChampionShards(): Promise<void> {
     return await this.disenchantShards(LootCategories.CHAMPION, LootTypes.DISPLAY_CATEGORIES);
   }
 
@@ -76,7 +76,7 @@ export class DisenchantLootModule extends Module {
   }
 
   private async disenchantChests(lootCategoryFilter: LootCategories, lootType: LootTypes): Promise<void> {
-    const prettyCategory = lootCategoryFilter.toLowerCase().replace('_',' ');
+    const prettyCategory = lootCategoryFilter.toLowerCase().replace('_', ' ');
     const allLoot = await this.getLoot();
     console.log(allLoot);
 
@@ -84,7 +84,7 @@ export class DisenchantLootModule extends Module {
       return lootItem[lootType] === lootCategoryFilter;
     });
 
-    if(allCategoryLoot.length > 0){
+    if (allCategoryLoot.length > 0) {
       // TODO: Find endpoint to open champion capsule/chests
     } else {
       this.showNoResourcesDialogue(prettyCategory);
@@ -92,7 +92,7 @@ export class DisenchantLootModule extends Module {
   }
 
   private async disenchantShards(lootCategoryFilter: LootCategories, lootType: LootTypes): Promise<void> {
-    const prettyCategory = lootCategoryFilter.toLowerCase().replace('_',' ');
+    const prettyCategory = lootCategoryFilter.toLowerCase().replace('_', ' ');
     const allLoot = await this.getLoot();
     console.log(allLoot);
 
@@ -102,7 +102,7 @@ export class DisenchantLootModule extends Module {
 
     // If resources are found, prompt all, owned, or cancel
     // If no resources are found for the selected category, stop and alert
-    if(allCategoryLoot.length > 0){
+    if (allCategoryLoot.length > 0) {
       const ownedCategoryLoot = Object.values(allLoot).filter((lootItem) => {
         return lootItem.displayCategories === lootCategoryFilter &&
             lootItem.itemStatus === LootItemStatus.OWNED;
@@ -125,8 +125,8 @@ export class DisenchantLootModule extends Module {
       };
 
       const promptResponse = await dialog.showMessageBox(null, promptOptions);
-      if(promptResponse.checkboxChecked){
-        switch(promptResponse['response']){
+      if (promptResponse.checkboxChecked) {
+        switch (promptResponse['response']) {
           // All
           case 0:
             this.disenchantLootItems(allCategoryLoot);
@@ -172,7 +172,7 @@ export class DisenchantLootModule extends Module {
   private async showNoResourcesDialogue(prettyCategory: string): Promise<void> {
     dialog.showMessageBox(null, {
       title: `No ${prettyCategory} shards found.`,
-      message: `It doesn't look like you have any ${prettyCategory} shards. \nCome back later when you do.`,
+      message: `It doesn't look like you have any ${prettyCategory} shards. \nCome back later when you do.`
     });
   }
 }

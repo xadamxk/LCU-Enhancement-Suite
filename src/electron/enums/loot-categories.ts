@@ -6,5 +6,5 @@ export enum LootCategories {
   CHAMPION_CAPSULE = 'CHEST_champion_mastery', // lootId
   SKIN = 'SKIN', // displayCategories
   SUMMONER_ICON = 'SUMMONERICON', // displayCategories
-  WARD_SKIN = 'WARDSKIN', // displayCategories
+  WARD_SKIN = 'WARDSKIN' // displayCategories
 }

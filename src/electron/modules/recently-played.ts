@@ -73,7 +73,7 @@ export class RecentlyPlayedModule extends WebSocketModule {
         // append separator between games
         if (index + 1 < reversedGameIds.length) {
           submenu.append(new MenuItem({
-            type: 'separator',
+            type: 'separator'
           }));
         }
       });

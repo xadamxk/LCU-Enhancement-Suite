@@ -12,7 +12,7 @@ const modules: Module[] = [
   new RecentlyPlayedModule(),
   new InviteGroupModule(),
   new DisenchantLootModule(),
-  new AutoAcceptQueueModule(),
+  new AutoAcceptQueueModule()
 ];
 
 export { modules };
