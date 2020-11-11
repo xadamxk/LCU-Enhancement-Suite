@@ -1,12 +1,12 @@
 import { Menu, MenuItem } from 'electron';
 import { StatusCode } from '../../connector';
-import { WebsocketModule } from '../api';
+import { WebSocketModule } from '../api';
 import { connection } from '../core';
 import { Endpoints, GameflowPhase } from '../enums';
 import { RecentlyPlayedSummoner } from '../models';
 import { GameflowPhaseSubscription } from '../subscriptions';
 
-export class RecentlyPlayedModule extends WebsocketModule {
+export class RecentlyPlayedModule extends WebSocketModule {
   id = 'RecentlyPlayed';
   recentSummonerLimit = 20;
 

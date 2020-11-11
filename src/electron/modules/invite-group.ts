@@ -1,12 +1,12 @@
 import { Menu, MenuItem } from 'electron';
 import { StatusCode } from '../../connector';
-import { WebsocketModule } from '../api';
+import { WebSocketModule } from '../api';
 import { connection } from '../core';
 import { Endpoints } from '../enums';
 import { Friend, FriendGroup } from '../models';
 import { FriendGroupsCreateSubscription, FriendGroupsDeleteSubscription } from '../subscriptions';
 
-export class InviteGroupModule extends WebsocketModule {
+export class InviteGroupModule extends WebSocketModule {
   id = 'InviteGroup';
   groupBlacklist = ['MOBILE', 'OFFLINE'];
   availabilityBlacklist = ['mobile', 'dnd'];

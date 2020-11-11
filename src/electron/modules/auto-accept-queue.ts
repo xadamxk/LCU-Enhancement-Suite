@@ -1,12 +1,12 @@
 import { MenuItem } from 'electron';
 import { LeagueEvent } from '../../connector';
-import { WebsocketModule } from '../api';
+import { WebSocketModule } from '../api';
 import { connection } from '../core';
 import { Endpoints, PlayerResponse } from '../enums';
 import { ReadyCheck } from '../models';
 import { ReadyCheckSubscription } from '../subscriptions';
 
-export class AutoAcceptQueueModule extends WebsocketModule {
+export class AutoAcceptQueueModule extends WebSocketModule {
   id = 'AutoAcceptQueue';
   checked = this.storage.get('checked', true);
 
