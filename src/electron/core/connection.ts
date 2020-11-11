@@ -41,7 +41,7 @@ LeagueConnection.prototype.getLoot = async function(this: LeagueConnection): Pro
 // Example: /lol-loot/v1/recipes/CHAMPION_RENTAL_disenchant/craft?repeat=2
 // Body:    ["CHAMPION_SKIN_RENTAL_8003"]
 LeagueConnection.prototype.disenchantLoot = async function(this: LeagueConnection, lootId: string, lootType: string, repeatCount = 1): Promise<Response> {
-  return await this.post(Endpoints.LOOT_RECIPES.replace('{LOOTTYPE}', lootType).replace('{REPEAT}', repeatCount.toString()), [lootId]);
+  return await this.post(`${Endpoints.LOOT_RECIPES}/${lootType}_disenchant/craft?repeat=${repeatCount}`, [lootId]);
 };
 
 LeagueConnection.prototype.getBalance = async function(this: LeagueConnection) : Promise<Response> {

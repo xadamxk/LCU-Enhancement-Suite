@@ -7,6 +7,6 @@ export enum Endpoints {
   RECENTLY_PLAYED_SUMMONERS = '/lol-match-history/v1/recently-played-summoners',
   GAMEFLOW_PHASE = '/lol-gameflow/v1/gameflow-phase',
   LOOT_MAP = '/lol-loot/v1/player-loot-map',
-  LOOT_RECIPES = '/lol-loot/v1/recipes/{LOOTTYPE}_disenchant/craft?repeat={REPEAT}',
+  LOOT_RECIPES = '/lol-loot/v1/recipes',
   WALLET = '/lol-store/v1/wallet',
 }
