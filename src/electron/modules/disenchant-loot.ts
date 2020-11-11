@@ -4,7 +4,6 @@ import { connection } from '../core';
 import { LootCategories, LootItemStatus, LootTypes } from '../enums';
 import { PlayerLoot } from '../models';
 
-
 export class DisenchantLootModule extends Module {
   id = 'DisenchantLoot';
 
@@ -89,12 +88,10 @@ export class DisenchantLootModule extends Module {
       return lootItem[lootType] === lootCategoryFilter;
     });
 
-    // If resources are found, prompt all, owned, or cancel
-    // If no resources are found for the selected category, stop and alert
-    if (allCategoryLoot.length > 0) {
+    if (allCategoryLoot.length > 0) { // resources found for the selected category
       const ownedCategoryLoot = Object.values(allLoot).filter((lootItem) => {
-        return lootItem.displayCategories === lootCategoryFilter &&
-            lootItem.itemStatus === LootItemStatus.OWNED;
+        return lootItem.displayCategories === lootCategoryFilter
+          && lootItem.itemStatus === LootItemStatus.OWNED;
       });
 
       // TODO: Debug why focus doesn't default to cancel
@@ -114,29 +111,27 @@ export class DisenchantLootModule extends Module {
       };
 
       const promptResponse = await dialog.showMessageBox(null, promptOptions);
+
       if (promptResponse.checkboxChecked) {
         switch (promptResponse['response']) {
-          // All
-          case 0:
+          case 0: // All
             this.disenchantLootItems(allCategoryLoot);
             break;
-          // Owned
-          case 1:
+          case 1: // Owned
             this.disenchantLootItems(ownedCategoryLoot);
             break;
-          case 2: break;
+          default:
+            break;
         }
       }
-
-    } else {
+    } else { // no resources found for the selected category
       await this.showNoResourcesDialogue(prettyCategory);
     }
   }
 
   private async getLoot(): Promise<PlayerLoot[]> {
     const lootResponse = await connection.getLoot();
-    // TODO: error handling for non-200 response codes
-    return lootResponse.json();
+    return lootResponse.json(); // TODO: error handling for non-200 response codes
   }
 
   private totalDisenchantValue(loot: PlayerLoot[]): number {
@@ -153,15 +148,14 @@ export class DisenchantLootModule extends Module {
 
   private async disenchantLootItem(lootId: string, lootType: string, repeatCount: number): Promise<void> {
     const disenchantResponse = await connection.disenchantLoot(lootId, lootType, repeatCount);
-    // TODO: error handling for non-200 response codes
     console.log(disenchantResponse);
-    return disenchantResponse.json();
+    return disenchantResponse.json(); // TODO: error handling for non-200 response codes
   }
 
   private async showNoResourcesDialogue(prettyCategory: string): Promise<void> {
     await dialog.showMessageBox(null, {
       title: `No ${prettyCategory} shards found.`,
-      message: `It doesn't look like you have any ${prettyCategory} shards. \nCome back later when you do.`
+      message: `It doesn't look like you have any ${prettyCategory} shards.\nCome back later when you do.`
     });
   }
 }
