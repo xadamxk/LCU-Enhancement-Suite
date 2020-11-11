@@ -1,9 +1,7 @@
-import { Console } from 'console';
-import { dialog, Dialog, Menu, MenuItem, MessageBoxOptions } from 'electron';
-import { StatusCode } from '../../connector';
+import { dialog, Menu, MenuItem, MessageBoxOptions } from 'electron';
 import { Module } from '../api';
 import { connection } from '../core';
-import { Endpoints, LootCategories, LootItemStatus, LootTypes } from '../enums';
+import { LootCategories, LootItemStatus, LootTypes } from '../enums';
 import { PlayerLoot } from '../models';
 
 
@@ -52,7 +50,7 @@ export class DisenchantLootModule extends Module {
     }));
 
     menuItem.sublabel = '';
-    this.updateMenu(menuItem);
+    return this.updateMenu(menuItem);
   }
 
   private async disenchantChampionCapsules(): Promise<void> {
@@ -170,7 +168,7 @@ export class DisenchantLootModule extends Module {
   }
 
   private async showNoResourcesDialogue(prettyCategory: string): Promise<void> {
-    dialog.showMessageBox(null, {
+    await dialog.showMessageBox(null, {
       title: `No ${prettyCategory} shards found.`,
       message: `It doesn't look like you have any ${prettyCategory} shards. \nCome back later when you do.`
     });
