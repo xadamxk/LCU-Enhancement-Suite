@@ -13,7 +13,6 @@ export class DisenchantLootModule extends Module {
 
     const menuItem = new MenuItem({
       label: 'Disenchant Loot',
-      sublabel: '',
       submenu: submenu
     });
 
@@ -21,35 +20,29 @@ export class DisenchantLootModule extends Module {
 
     submenu.append(new MenuItem({
       label: 'Champion Capsules',
-      type: 'normal',
-      click: async() => await this.disenchantChampionCapsules()
+      click: async() => this.disenchantChampionCapsules()
     }));
 
     submenu.append(new MenuItem({
       label: 'Champion Shards',
-      type: 'normal',
-      click: async() => await this.disenchantChampionShards()
+      click: async() => this.disenchantChampionShards()
     }));
 
     submenu.append(new MenuItem({
       label: 'Eternals Set Shards',
-      type: 'normal',
-      click: async() => await this.disenchantEternalShards()
+      click: async() => this.disenchantEternalShards()
     }));
 
     submenu.append(new MenuItem({
       label: 'Skin Shards',
-      type: 'normal',
-      click: async() => await this.disenchantSkinShards()
+      click: async() => this.disenchantSkinShards()
     }));
 
     submenu.append(new MenuItem({
       label: 'Ward Skin Shards',
-      type: 'normal',
-      click: async() => await this.disenchantWardSkinShards()
+      click: async() => this.disenchantWardSkinShards()
     }));
 
-    menuItem.sublabel = '';
     return this.updateMenu(menuItem);
   }
 

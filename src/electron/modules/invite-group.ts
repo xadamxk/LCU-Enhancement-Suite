@@ -47,7 +47,6 @@ export class InviteGroupModule extends WebSocketModule {
 
       submenu.append(new MenuItem({
         label: 'All Friends',
-        type: 'normal',
         click: async() => this.inviteFriendGroup()
       }));
 
@@ -55,7 +54,6 @@ export class InviteGroupModule extends WebSocketModule {
         if (!this.groupBlacklist.includes(friendGroup.name)) {
           submenu.append(new MenuItem({
             label: friendGroup.name === '**Default' ? 'General' : friendGroup.name,
-            type: 'normal',
             click: async() => this.inviteFriendGroup(friendGroup.id)
           }));
         }
