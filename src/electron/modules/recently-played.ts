@@ -30,7 +30,7 @@ export class RecentlyPlayedModule extends WebSocketModule {
       submenu: submenu
     });
 
-    this.updateMenu(menuItem);
+    await this.updateMenu(menuItem);
 
     const response = await connection.get(Endpoints.RECENTLY_PLAYED_SUMMONERS);
 
@@ -79,7 +79,7 @@ export class RecentlyPlayedModule extends WebSocketModule {
       });
 
       menuItem.sublabel = '';
-      this.updateMenu(menuItem);
+      return this.updateMenu(menuItem);
     }
   }
 }

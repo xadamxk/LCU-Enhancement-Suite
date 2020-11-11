@@ -16,8 +16,6 @@ export class DisenchantLootModule extends Module {
       submenu: submenu
     });
 
-    this.updateMenu(menuItem);
-
     submenu.append(new MenuItem({
       label: 'Champion Capsules',
       click: async() => this.disenchantChampionCapsules()
@@ -47,23 +45,23 @@ export class DisenchantLootModule extends Module {
   }
 
   private async disenchantChampionCapsules(): Promise<void> {
-    return await this.disenchantChests(LootCategories.CHAMPION_CAPSULE, LootTypes.LOOT_ID);
+    return this.disenchantChests(LootCategories.CHAMPION_CAPSULE, LootTypes.LOOT_ID);
   }
 
   private async disenchantChampionShards(): Promise<void> {
-    return await this.disenchantShards(LootCategories.CHAMPION, LootTypes.DISPLAY_CATEGORIES);
+    return this.disenchantShards(LootCategories.CHAMPION, LootTypes.DISPLAY_CATEGORIES);
   }
 
   private async disenchantSkinShards(): Promise<void> {
-    return await this.disenchantShards(LootCategories.SKIN, LootTypes.DISPLAY_CATEGORIES);
+    return this.disenchantShards(LootCategories.SKIN, LootTypes.DISPLAY_CATEGORIES);
   }
 
   private async disenchantWardSkinShards(): Promise<void> {
-    return await this.disenchantShards(LootCategories.WARD_SKIN, LootTypes.DISPLAY_CATEGORIES);
+    return this.disenchantShards(LootCategories.WARD_SKIN, LootTypes.DISPLAY_CATEGORIES);
   }
 
   private async disenchantEternalShards(): Promise<void> {
-    return await this.disenchantShards(LootCategories.ETERNALS, LootTypes.DISPLAY_CATEGORIES);
+    return this.disenchantShards(LootCategories.ETERNALS, LootTypes.DISPLAY_CATEGORIES);
   }
 
   private async disenchantChests(lootCategoryFilter: LootCategories, lootType: LootTypes): Promise<void> {
@@ -78,7 +76,7 @@ export class DisenchantLootModule extends Module {
     if (allCategoryLoot.length > 0) {
       // TODO: Find endpoint to open champion capsule/chests
     } else {
-      this.showNoResourcesDialogue(prettyCategory);
+      await this.showNoResourcesDialogue(prettyCategory);
     }
   }
 
@@ -131,14 +129,14 @@ export class DisenchantLootModule extends Module {
       }
 
     } else {
-      this.showNoResourcesDialogue(prettyCategory);
+      await this.showNoResourcesDialogue(prettyCategory);
     }
   }
 
   private async getLoot(): Promise<PlayerLoot[]> {
     const lootResponse = await connection.getLoot();
     // TODO: error handling for non-200 response codes
-    return await lootResponse.json();
+    return lootResponse.json();
   }
 
   private totalDisenchantValue(loot: PlayerLoot[]): number {
@@ -157,7 +155,7 @@ export class DisenchantLootModule extends Module {
     const disenchantResponse = await connection.disenchantLoot(lootId, lootType, repeatCount);
     // TODO: error handling for non-200 response codes
     console.log(disenchantResponse);
-    return await disenchantResponse.json();
+    return disenchantResponse.json();
   }
 
   private async showNoResourcesDialogue(prettyCategory: string): Promise<void> {

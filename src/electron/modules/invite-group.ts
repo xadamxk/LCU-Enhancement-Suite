@@ -36,7 +36,7 @@ export class InviteGroupModule extends WebSocketModule {
       submenu: submenu
     });
 
-    this.updateMenu(menuItem);
+    await this.updateMenu(menuItem);
 
     const response = await connection.get(Endpoints.FRIEND_GROUPS);
 
@@ -60,7 +60,7 @@ export class InviteGroupModule extends WebSocketModule {
       });
 
       menuItem.sublabel = '';
-      this.updateMenu(menuItem);
+      return this.updateMenu(menuItem);
     }
   }
 
