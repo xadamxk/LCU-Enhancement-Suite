@@ -1,20 +1,16 @@
 import { Console } from 'console';
 import { dialog, Dialog, Menu, MenuItem, MessageBoxOptions } from 'electron';
 import { StatusCode } from '../../connector';
-import { WebsocketModule } from '../api';
+import { Module } from '../api';
 import { connection } from '../core';
 import { Endpoints, LootCategories, LootItemStatus, LootTypes } from '../enums';
 import { PlayerLoot } from '../models';
 
 
-export class DisenchantLootModule extends WebsocketModule {
+export class DisenchantLootModule extends Module {
   id = 'DisenchantLoot';
 
   async register(): Promise<void> {
-    return this.refresh();
-  }
-
-  async refresh(): Promise<void> {
     const submenu = new Menu();
 
     const menuItem = new MenuItem({
