@@ -31,6 +31,11 @@ export class DisenchantLootModule extends Module {
     }));
 
     submenu.append(new MenuItem({
+      label: 'Summoner Icons',
+      click: async() => this.disenchantIconShards()
+    }));
+
+    submenu.append(new MenuItem({
       label: 'Skin Shards',
       click: async() => this.disenchantSkinShards()
     }));
@@ -61,6 +66,10 @@ export class DisenchantLootModule extends Module {
 
   private async disenchantEternalShards(): Promise<void> {
     return this.disenchantShards(LootCategories.ETERNALS, LootTypes.DISPLAY_CATEGORIES);
+  }
+
+  private async disenchantIconShards(): Promise<void> {
+    return this.disenchantShards(LootCategories.SUMMONER_ICON, LootTypes.DISPLAY_CATEGORIES);
   }
 
   private async disenchantChests(lootCategoryFilter: LootCategories, lootType: LootTypes): Promise<void> {
