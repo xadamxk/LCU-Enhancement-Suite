@@ -16,6 +16,9 @@ declare module '../../connector' {
     addSubscription(subscription: Subscription): void;
     removeSubscription(subscription: Subscription): void
     inviteSummoners(...summonerIds: number[]): Promise<Response>
+    getLoot(): Promise<Response>
+    disenchantLoot(lootId: string, lootType: string, repeatCount: number): Promise<Response>
+    getBalance(): Promise<Response>
   }
 }
 
@@ -29,4 +32,18 @@ LeagueConnection.prototype.removeSubscription = function(this: LeagueConnection,
 
 LeagueConnection.prototype.inviteSummoners = async function(this: LeagueConnection, ...summonerIds: number[]): Promise<Response> {
   return await this.post(Endpoints.INVITATIONS, summonerIds.map((summonerId: number) => new Object({ 'toSummonerId': summonerId })));
+};
+
+LeagueConnection.prototype.getLoot = async function(this: LeagueConnection): Promise<Response> {
+  return await this.get(Endpoints.LOOT_MAP);
+};
+
+// Example: /lol-loot/v1/recipes/CHAMPION_RENTAL_disenchant/craft?repeat=2
+// Body:    ["CHAMPION_SKIN_RENTAL_8003"]
+LeagueConnection.prototype.disenchantLoot = async function(this: LeagueConnection, lootId: string, lootType: string, repeatCount = 1): Promise<Response> {
+  return await this.post(`${Endpoints.LOOT_RECIPES}/${lootType}_disenchant/craft?repeat=${repeatCount}`, [lootId]);
+};
+
+LeagueConnection.prototype.getBalance = async function(this: LeagueConnection) : Promise<Response> {
+  return await this.get(Endpoints.WALLET);
 };

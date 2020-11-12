@@ -5,5 +5,8 @@ export enum Endpoints {
   READY_CHECK = '/lol-matchmaking/v1/ready-check',
   READY_CHECK_ACCEPT = '/lol-matchmaking/v1/ready-check/accept',
   RECENTLY_PLAYED_SUMMONERS = '/lol-match-history/v1/recently-played-summoners',
-  GAMEFLOW_PHASE = '/lol-gameflow/v1/gameflow-phase'
+  GAMEFLOW_PHASE = '/lol-gameflow/v1/gameflow-phase',
+  LOOT_MAP = '/lol-loot/v1/player-loot-map',
+  LOOT_RECIPES = '/lol-loot/v1/recipes',
+  WALLET = '/lol-store/v1/wallet'
 }

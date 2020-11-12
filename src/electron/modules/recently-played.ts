@@ -1,16 +1,17 @@
 import { Menu, MenuItem } from 'electron';
 import { StatusCode } from '../../connector';
-import { WebsocketModule } from '../api';
+import { WebSocketModule } from '../api';
 import { connection } from '../core';
 import { Endpoints, GameflowPhase } from '../enums';
 import { RecentlyPlayedSummoner } from '../models';
 import { GameflowPhaseSubscription } from '../subscriptions';
 
-export class RecentlyPlayedModule extends WebsocketModule {
+export class RecentlyPlayedModule extends WebSocketModule {
   id = 'RecentlyPlayed';
   recentSummonerLimit = 20;
 
   async register(): Promise<void> {
+    // TODO: Add subscription for call when client initially loads friends (ie. signing into different account)
     connection.addSubscription(
       new GameflowPhaseSubscription(() => {
         this.refresh();
@@ -29,7 +30,7 @@ export class RecentlyPlayedModule extends WebsocketModule {
       submenu: submenu
     });
 
-    this.updateMenu(menuItem);
+    await this.updateMenu(menuItem);
 
     const response = await connection.get(Endpoints.RECENTLY_PLAYED_SUMMONERS);
 
@@ -72,13 +73,13 @@ export class RecentlyPlayedModule extends WebsocketModule {
         // append separator between games
         if (index + 1 < reversedGameIds.length) {
           submenu.append(new MenuItem({
-            type: 'separator',
+            type: 'separator'
           }));
         }
       });
 
       menuItem.sublabel = '';
-      this.updateMenu(menuItem);
+      return this.updateMenu(menuItem);
     }
   }
 }

@@ -29,6 +29,6 @@ export abstract class Module {
   };
 }
 
-export abstract class WebsocketModule extends Module {
+export abstract class WebSocketModule extends Module {
   abstract async refresh(event: LeagueEvent): Promise<void>;
 }

@@ -1,12 +1,12 @@
 import { Menu, MenuItem } from 'electron';
 import { StatusCode } from '../../connector';
-import { WebsocketModule } from '../api';
+import { WebSocketModule } from '../api';
 import { connection } from '../core';
 import { Endpoints } from '../enums';
 import { Friend, FriendGroup } from '../models';
 import { FriendGroupsCreateSubscription, FriendGroupsDeleteSubscription } from '../subscriptions';
 
-export class InviteGroupModule extends WebsocketModule {
+export class InviteGroupModule extends WebSocketModule {
   id = 'InviteGroup';
   groupBlacklist = ['MOBILE', 'OFFLINE'];
   availabilityBlacklist = ['mobile', 'dnd'];
@@ -36,7 +36,7 @@ export class InviteGroupModule extends WebsocketModule {
       submenu: submenu
     });
 
-    this.updateMenu(menuItem);
+    await this.updateMenu(menuItem);
 
     const response = await connection.get(Endpoints.FRIEND_GROUPS);
 
@@ -47,7 +47,6 @@ export class InviteGroupModule extends WebsocketModule {
 
       submenu.append(new MenuItem({
         label: 'All Friends',
-        type: 'normal',
         click: async() => this.inviteFriendGroup()
       }));
 
@@ -55,14 +54,13 @@ export class InviteGroupModule extends WebsocketModule {
         if (!this.groupBlacklist.includes(friendGroup.name)) {
           submenu.append(new MenuItem({
             label: friendGroup.name === '**Default' ? 'General' : friendGroup.name,
-            type: 'normal',
             click: async() => this.inviteFriendGroup(friendGroup.id)
           }));
         }
       });
 
       menuItem.sublabel = '';
-      this.updateMenu(menuItem);
+      return this.updateMenu(menuItem);
     }
   }
 
