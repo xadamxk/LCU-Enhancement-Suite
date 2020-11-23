@@ -19,6 +19,7 @@ declare module '../../connector' {
     getLoot(): Promise<Response>
     disenchantLoot(lootId: string, lootType: string, repeatCount: number): Promise<Response>
     getBalance(): Promise<Response>
+    getFriends(): Promise<Response>
   }
 }
 
@@ -46,4 +47,8 @@ LeagueConnection.prototype.disenchantLoot = async function(this: LeagueConnectio
 
 LeagueConnection.prototype.getBalance = async function(this: LeagueConnection) : Promise<Response> {
   return await this.get(Endpoints.WALLET);
+};
+
+LeagueConnection.prototype.getFriends = async function(this: LeagueConnection) : Promise<Response> {
+  return await this.get(Endpoints.FRIENDS);
 };
