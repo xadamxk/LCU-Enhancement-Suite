@@ -48,9 +48,13 @@ export class FriendsListModule extends WebSocketModule {
     return;
   }
 
-  private async exportFriends(): Promise<void> {
+  private async getFriends(): Promise<void> {
     const friendsResponse = await connection.getFriends();
-    const friends = friendsResponse.json();
+    return friendsResponse.json();
+  }
+
+  private async exportFriends(): Promise<void> {
+    const friends = await this.getFriends();
     console.log(friends);
     dialog.showSaveDialog({
       defaultPath: process.env.HOME,
