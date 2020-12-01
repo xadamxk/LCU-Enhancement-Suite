@@ -48,16 +48,35 @@ export class FriendsListModule extends WebSocketModule {
     return;
   }
 
-  private async getFriends(): Promise<void> {
+  private async getFriends(): Promise<Friend[]> {
     const friendsResponse = await connection.getFriends();
     return friendsResponse.json();
   }
 
-  private async exportFriends(): Promise<void> {
+  private async exportFriends(): Promise<Friend[]> {
     const friends = await this.getFriends();
-    console.log(friends);
+    const propsToKeep = ['gameName', 'gameTag', 'groupName',  'name', 'note', 'summonerId'];
+    // Filter out irrelavent properties
+    const condensedFriends = friends.map(friend => {
+      const obj = {};
+      for (const prop of propsToKeep) {
+        obj[prop] = friend[prop];
+      }
+      return obj;
+    });
+
+    const d = new Date();
+    const fileName = [
+      'ExportedFriends',
+      d.getFullYear(),
+      d.getMonth() + 1,
+      d.getDate(),
+      d.getHours(),
+      d.getMinutes()
+    ].join('-');
+    console.log(condensedFriends);
     dialog.showSaveDialog({
-      defaultPath: process.env.HOME,
+      defaultPath: `${process.env.HOME}/${fileName}.json`,
       filters: [{
         name: 'JSON', extensions: ['json']
       }]
@@ -65,7 +84,7 @@ export class FriendsListModule extends WebSocketModule {
       if (!file.canceled) {
         fs.writeFile(
           file.filePath.toString(),
-          JSON.stringify(friends), function(err) {
+          JSON.stringify(condensedFriends), function(err) {
             if (err) throw err;
             console.log('Saved!');
           });
