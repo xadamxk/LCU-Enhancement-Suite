@@ -2,6 +2,7 @@ import { Response } from 'node-fetch';
 import { LeagueConnection } from '../../connector';
 import { Subscription } from '../api';
 import { Endpoints } from '../enums';
+import { FriendRequest } from '../models/friend-request';
 
 let connection: LeagueConnection = null;
 
@@ -20,6 +21,7 @@ declare module '../../connector' {
     disenchantLoot(lootId: string, lootType: string, repeatCount: number): Promise<Response>
     getBalance(): Promise<Response>
     getFriends(): Promise<Response>
+    sendFriendRequest(): Promise<Response>;
   }
 }
 
@@ -51,4 +53,9 @@ LeagueConnection.prototype.getBalance = async function(this: LeagueConnection) :
 
 LeagueConnection.prototype.getFriends = async function(this: LeagueConnection) : Promise<Response> {
   return await this.get(Endpoints.FRIENDS);
+};
+
+// TODO: Address type issue
+LeagueConnection.prototype.sendFriendRequest = async function(this: LeagueConnection, friendRequest: FriendRequest): Promise<Response> {
+  return await this.post(Endpoints.FRIEND_REQUESTS, friendRequest);
 };

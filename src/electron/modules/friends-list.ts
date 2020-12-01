@@ -55,7 +55,14 @@ export class FriendsListModule extends WebSocketModule {
 
   private async exportFriends(): Promise<Friend[]> {
     const friends = await this.getFriends();
-    const propsToKeep = ['gameName', 'gameTag', 'groupName',  'name', 'note', 'summonerId'];
+    const propsToKeep = [
+      'gameName',
+      'gameTag',
+      'groupName',
+      'name',
+      'note',
+      'summonerId'
+    ];
     // Filter out irrelavent properties
     const condensedFriends = friends.map(friend => {
       const obj = {};
@@ -74,7 +81,7 @@ export class FriendsListModule extends WebSocketModule {
       d.getHours(),
       d.getMinutes()
     ].join('-');
-    console.log(condensedFriends);
+
     dialog.showSaveDialog({
       defaultPath: `${process.env.HOME}/${fileName}.json`,
       filters: [{
