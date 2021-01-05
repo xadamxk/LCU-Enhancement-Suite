@@ -1,4 +1,5 @@
 export enum Endpoints {
+  CHAT_ME = '/lol-chat/v1/me',
   INVITATIONS = '/lol-lobby/v2/lobby/invitations',
   FRIEND_GROUPS = '/lol-chat/v1/friend-groups',
   FRIENDS = '/lol-chat/v1/friends',

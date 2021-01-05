@@ -38,12 +38,15 @@ export class FriendsListModule extends WebSocketModule {
   }
 
   private async importFriends(): Promise<void> {
-    const importDialog =  await dialog.showSaveDialog({
+    const importDialog =  await dialog.showOpenDialog({
       defaultPath: process.env.HOME,
       filters: [{
         name: 'JSON', extensions: ['json']
       }]
     });
+    if (importDialog.canceled) {
+      return;
+    }
     console.log(importDialog);
     return;
   }
@@ -93,7 +96,7 @@ export class FriendsListModule extends WebSocketModule {
           file.filePath.toString(),
           JSON.stringify(condensedFriends), function(err) {
             if (err) throw err;
-            console.log('Saved!');
+            console.log('Exported friends list!');
           });
       }
     });

@@ -80,6 +80,10 @@ export class LeagueConnection implements ILeagueConnection {
     return this.request(uri, Method.POST, body);
   }
 
+  public async put(uri: string, body: any): Promise<Response> {
+    return this.request(uri, Method.PUT, body);
+  }
+
   public async request(uri: string, method: Method, body: Record<string | number, unknown> | Array<Record<string | number, unknown>> | Array<unknown> | FriendRequest | URLSearchParams = null): Promise<Response> {
     const options: RequestInit = {
       method,

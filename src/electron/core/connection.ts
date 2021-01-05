@@ -3,6 +3,7 @@ import { LeagueConnection } from '../../connector';
 import { Subscription } from '../api';
 import { Endpoints } from '../enums';
 import { FriendRequest } from '../models/friend-request';
+import { LOLChatMe } from '../models/lolchat-me';
 
 let connection: LeagueConnection = null;
 
@@ -21,7 +22,8 @@ declare module '../../connector' {
     disenchantLoot(lootId: string, lootType: string, repeatCount: number): Promise<Response>
     getBalance(): Promise<Response>
     getFriends(): Promise<Response>
-    sendFriendRequest(): Promise<Response>;
+    sendFriendRequest(friendRequest: FriendRequest): Promise<Response>;
+    updateChatMe(icon: LOLChatMe): Promise<Response>;
   }
 }
 
@@ -58,4 +60,8 @@ LeagueConnection.prototype.getFriends = async function(this: LeagueConnection) :
 // TODO: Address type issue
 LeagueConnection.prototype.sendFriendRequest = async function(this: LeagueConnection, friendRequest: FriendRequest): Promise<Response> {
   return await this.post(Endpoints.FRIEND_REQUESTS, friendRequest);
+};
+
+LeagueConnection.prototype.updateChatMe = async function(this: LeagueConnection, icon: LOLChatMe): Promise<Response> {
+  return await this.put(Endpoints.CHAT_ME, icon);
 };
