@@ -1,15 +1,28 @@
-import { MenuItem, Menu, dialog, SaveDialogReturnValue } from 'electron';
+import { MenuItem, Menu, dialog } from 'electron';
+import { stat, statSync } from 'fs';
 import { LeagueEvent } from '../../connector';
 import { WebSocketModule } from '../api';
 import { connection } from '../core';
 import { Endpoints, PlayerResponse } from '../enums';
-import { Friend } from '../models';
+import { Friend, FriendRequest } from '../models';
 import { ReadyCheckSubscription } from '../subscriptions';
 
 const fs = require('fs');
 
 export class FriendsListModule extends WebSocketModule {
   id = 'FriendsList';
+  exportedFriendProps = [
+    'gameName',
+    'gameTag',
+    'icon',
+    'id',
+    // 'groupName',
+    'name',
+    'note',
+    'pid',
+    'puuid',
+    'summonerId'
+  ];
 
   async register(): Promise<void> {
     // Sub Menu (Import, Export, etc?)
@@ -44,11 +57,63 @@ export class FriendsListModule extends WebSocketModule {
         name: 'JSON', extensions: ['json']
       }]
     });
-    if (importDialog.canceled) {
+    if (importDialog.canceled || importDialog.filePaths.length !== 1) {
       return;
     }
-    console.log(importDialog);
-    return;
+    const rawFile = fs.readFileSync(importDialog.filePaths[0]);
+    const importedFriends = JSON.parse(rawFile);
+    const promptOptions = {
+      type: 'question',
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      message: `Are you sure you want to import ${importedFriends.length} friend(s)?`,
+      buttons: [
+        'Yes, add them.',
+        'Cancel.'
+      ]
+    };
+    // Confirm adding friends
+    const promptResponse = await dialog.showMessageBox(null, promptOptions);
+    if (promptResponse.response !== 0) {
+      return;
+    }
+
+    const successfulFriends = [];
+    const notFoundFriends = [];
+    const failedFriends = [];
+    // Loop friends object, send request
+    for (const friend of importedFriends) {
+      friend['direction'] = 'out';
+      const statusCode = await this.addFriend({...friend});
+      switch (statusCode) {
+        case 204: successfulFriends.push(friend);
+          break;
+        case 404: notFoundFriends.push(friend);
+          break;
+        default: failedFriends.push(friend);
+      }
+    }
+    const notFoundCount = notFoundFriends.length;
+    const failedCount = failedFriends.length;
+    // Prompt user for errors or success
+    if (notFoundCount > 0 || failedCount > 0) {
+      const errorPromptOptions = {
+        type: 'error',
+        title: `Failed to add ${notFoundCount + failedCount} friend(s).`,
+        message: `Usernames not found: ${this.printNames(notFoundFriends)}\nFailed to add: ${this.printNames(failedFriends)}`
+      };
+      dialog.showMessageBox(null, errorPromptOptions);
+    } else {
+      const successPromptOptions = {
+        type: 'info',
+        title: 'Success',
+        message: `Added ${successfulFriends.length} friend(s).`
+      };
+      dialog.showMessageBox(null, successPromptOptions);
+    }
+  }
+
+  private printNames(friendList: FriendRequest[]): string {
+    return friendList.map(friend => friend.gameName).toString();
   }
 
   private async getFriends(): Promise<Friend[]> {
@@ -56,20 +121,17 @@ export class FriendsListModule extends WebSocketModule {
     return friendsResponse.json();
   }
 
+  private async addFriend(friendRequest: FriendRequest) {
+    const addFriendResponse = await connection.sendFriendRequest(friendRequest);
+    return addFriendResponse.status;
+  }
+
   private async exportFriends(): Promise<Friend[]> {
     const friends = await this.getFriends();
-    const propsToKeep = [
-      'gameName',
-      'gameTag',
-      'groupName',
-      'name',
-      'note',
-      'summonerId'
-    ];
     // Filter out irrelavent properties
     const condensedFriends = friends.map(friend => {
       const obj = {};
-      for (const prop of propsToKeep) {
+      for (const prop of this.exportedFriendProps) {
         obj[prop] = friend[prop];
       }
       return obj;

@@ -1,7 +1,7 @@
 import { Model } from '../api';
 
 export class FriendRequest extends Model {
-  direction: string;
+  direction?: string;
   gameName: string;
   gameTag: string;
   icon: number;
@@ -10,5 +10,5 @@ export class FriendRequest extends Model {
   note: string;
   pid: string;
   puuid: string;
-  summonerId: string;
+  summonerId: number;
 }
