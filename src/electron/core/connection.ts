@@ -57,7 +57,6 @@ LeagueConnection.prototype.getFriends = async function(this: LeagueConnection) :
   return await this.get(Endpoints.FRIENDS);
 };
 
-// TODO: Address type issue
 LeagueConnection.prototype.sendFriendRequest = async function(this: LeagueConnection, friendRequest: FriendRequest): Promise<Response> {
   return await this.post(Endpoints.FRIEND_REQUESTS, friendRequest);
 };
