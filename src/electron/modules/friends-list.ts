@@ -25,7 +25,7 @@ export class FriendsListModule extends WebSocketModule {
   ];
 
   async register(): Promise<void> {
-    // Sub Menu (Import, Export, etc?)
+    // Sub Menu
     const submenu = new Menu();
 
     const menuItem = new MenuItem({
