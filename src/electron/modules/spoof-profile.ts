@@ -1,20 +1,20 @@
 import { MenuItem, Menu, dialog } from 'electron';
 import { LeagueEvent } from '../../connector';
 import { WebSocketModule } from '../api';
-import { connection } from '../core';
-import { Endpoints } from '../enums';
-import {  } from '../models';
-import {  } from '../subscriptions';
+// import { connection } from '../core';
+// import { Endpoints } from '../enums';
+// import {  } from '../models';
+// import {  } from '../subscriptions';
 
-const fs = require('fs');
 
 export class SpoofProfileModule extends WebSocketModule {
   id = 'SpoofProfile';
+  // Spoof Rank
   tiers = [
-    'I',
-    'II',
+    'IV',
     'III',
-    'IV'];
+    'II',
+    'I'];
   ranks = {
     'Iron': this.tiers,
     'Bronze': this.tiers,
@@ -40,7 +40,7 @@ export class SpoofProfileModule extends WebSocketModule {
   ];
 
   async register(): Promise<void> {
-    // Sub Menu
+    /* Spoof Chat Rank */
     const submenu = new Menu();
     const rankSubmenu = new Menu();
     const menuItem = new MenuItem({
@@ -57,17 +57,17 @@ export class SpoofProfileModule extends WebSocketModule {
         const modeSubmenu = new Menu();
         this.queues.forEach(queue => {
           const queueType = queue.value;
-          const queueKey = queue.key;
+          const queueName = queue.name;
           // SR
           if (queueType == this.queues[0].value) {
             modeSubmenu.append(new MenuItem({
-              label: queueKey,
+              label: queueName,
               click: async() => this.spoofSRRank(queueType, tier, division)
             }));
           } else {
           // TFT
             modeSubmenu.append(new MenuItem({
-              label: queueKey,
+              label: queueName,
               click: async() => this.spoofTFTRank(queueType, tier, division)
             }));
           }
@@ -85,13 +85,84 @@ export class SpoofProfileModule extends WebSocketModule {
       }));
     });
 
-    // Append tiers to rank
     submenu.append(new MenuItem({
-      label: 'Spoof Rank',
+      label: 'Chat Rank',
       submenu: rankSubmenu
     }));
 
+    /* Spoof Profile Icon */
+    const icons = {
+      'Unreleased':[
+        {
+          name: 'Eternal Reign',
+          value: 3504
+        },
+        {
+          name: 'Reign of Order',
+          value: 1669
+        }
+      ],
+      'Ranked': [
+        {
+          name: 'Grand Master Beta Tester',
+          value: 534
+        }
+      ],
+      'Server Limited': [
+        {
+          name: 'Beta Tester (LA)',
+          value: 553
+        },
+        {
+          name: 'Tencent Gangplank (SEA)',
+          value: 69
+        },
+        {
+          name: 'Tencent Garen (SEA)',
+          value: 66
+        },
+        {
+          name: 'Tencent Caitlyn (SEA)',
+          value: 71
+        },
+        {
+          name: '5th Anniversary Poro (TR)',
+          value: 3218
+        }
+      ],
+      'Unobtainable': [
+        {
+          name: 'Page Purchaser (Runes)',
+          value: 3181
+        },
+        {
+          name: 'Rare Page Owner (Runes)',
+          value: 3162
+        },
+        {
+          name: 'Golden Spatula',
+          value: 786
+        },
+        {
+          name: 'Positive Play (Honor)',
+          value: 774
+        }
+      ],
+      'Misc':[
+        {
+          name: 'Placeholder Icon',
+          value: 501
+        }, {
+          name: 'No Icon',
+          value: 29
+        }
+      ]
+    };
 
+    submenu.append(new MenuItem({
+      label: 'Profile Icon',
+      submenu: rankSubmenu
+    }));
 
     return this.updateMenu(menuItem);
   }
