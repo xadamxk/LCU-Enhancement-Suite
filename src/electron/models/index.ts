@@ -4,4 +4,5 @@ export * from './player-loot';
 export * from './ready-check';
 export * from './recently-played-summoner';
 export * from './friend-request';
-export * from './lolchat-me';
+export * from './lolchat-icon';
+export * from './lolchat-rank';

@@ -1,9 +1,10 @@
 import { MenuItem, Menu, dialog } from 'electron';
 import { LeagueEvent } from '../../connector';
 import { WebSocketModule } from '../api';
+import { connection } from '../core';
 // import { connection } from '../core';
 // import { Endpoints } from '../enums';
-// import {  } from '../models';
+import { LOLChatRank } from '../models';
 // import {  } from '../subscriptions';
 
 
@@ -49,8 +50,9 @@ export class SpoofProfileModule extends WebSocketModule {
     });
 
     // Append divisions to rank
-    Object.entries(this.ranks).forEach(rank => {
-      const division = rank[0];
+    const rankEntries = Object.entries(this.ranks);
+    rankEntries.forEach((rank, rankIndex) => {
+      let division = rank[0];
       const tierSubmenu = new Menu();
       // Loop queues
       rank[1].forEach(tier => {
@@ -58,19 +60,15 @@ export class SpoofProfileModule extends WebSocketModule {
         this.queues.forEach(queue => {
           const queueType = queue.value;
           const queueName = queue.name;
-          // SR
-          if (queueType == this.queues[0].value) {
-            modeSubmenu.append(new MenuItem({
-              label: queueName,
-              click: async() => this.spoofSRRank(queueType, tier, division)
-            }));
-          } else {
-          // TFT
-            modeSubmenu.append(new MenuItem({
-              label: queueName,
-              click: async() => this.spoofTFTRank(queueType, tier, division)
-            }));
+          // No divisions for top 3 tiers
+          if (rankIndex > rankEntries.length - 4) {
+            division = '';
           }
+          // Append menu item
+          modeSubmenu.append(new MenuItem({
+            label: queueName,
+            click: async() => this.spoofRank(queueType, tier, division)
+          }));
         });
         // Append mode to tier
         tierSubmenu.append(new MenuItem({
@@ -86,7 +84,7 @@ export class SpoofProfileModule extends WebSocketModule {
     });
 
     submenu.append(new MenuItem({
-      label: 'Chat Rank',
+      label: 'Rank (Chat)',
       submenu: rankSubmenu
     }));
 
@@ -160,7 +158,7 @@ export class SpoofProfileModule extends WebSocketModule {
     };
 
     submenu.append(new MenuItem({
-      label: 'Profile Icon',
+      label: 'Icon (Chat)',
       submenu: rankSubmenu
     }));
 
@@ -171,12 +169,22 @@ export class SpoofProfileModule extends WebSocketModule {
     //
   }
 
-  async spoofSRRank(queueType: string, tier: string, division: string): Promise<void> {
-    console.log(`${queueType},${tier},${division}`);
-  }
+  async spoofRank(queueType: string, division: string, tier: string): Promise<void> {
+    // Flip tier/division values for tiers without divisions
+    if (!tier) {
+      const temp = tier;
+      tier = division;
+      division = temp;
+    }
 
-  async spoofTFTRank(queueType:string, tier: string, division: string): Promise<void> {
-    console.log(`${queueType},${tier},${division}`);
+    const rankBody: LOLChatRank = {
+      lol: {
+        rankedLeagueDivision: division.toUpperCase(),
+        rankedLeagueTier: tier.toUpperCase(),
+        rankedLeagueQueue: queueType
+      }
+    };
 
+    await connection.updateChatMeRank(rankBody);
   }
 }
