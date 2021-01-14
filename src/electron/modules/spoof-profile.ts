@@ -4,7 +4,7 @@ import { WebSocketModule } from '../api';
 import { connection } from '../core';
 // import { connection } from '../core';
 // import { Endpoints } from '../enums';
-import { LOLChatRank } from '../models';
+import { LOLChatIcon, LOLChatRank } from '../models';
 // import {  } from '../subscriptions';
 
 
@@ -84,7 +84,7 @@ export class SpoofProfileModule extends WebSocketModule {
     });
 
     submenu.append(new MenuItem({
-      label: 'Rank (Chat)',
+      label: 'Chat Rank',
       submenu: rankSubmenu
     }));
 
@@ -157,9 +157,31 @@ export class SpoofProfileModule extends WebSocketModule {
       ]
     };
 
+    const iconSubmenu = new Menu();
+    const iconEntries = Object.entries(icons);
+    iconEntries.forEach(iconCategory => {
+      const iconCategorySubmenu = new Menu();
+      const iconCategoryName = iconCategory[0];
+      const iconCategoryIcons = iconCategory[1];
+
+      // Loop icons in category
+      iconCategoryIcons.forEach(icon => {
+        iconCategorySubmenu.append(new MenuItem({
+          label: icon['name'],
+          click: async() => this.spoofIcon(icon['value'])
+        }));
+      });
+
+      // Append category
+      iconSubmenu.append(new MenuItem({
+        label: iconCategoryName,
+        submenu: iconCategorySubmenu
+      }));
+    });
+
     submenu.append(new MenuItem({
-      label: 'Icon (Chat)',
-      submenu: rankSubmenu
+      label: 'Chat Icon',
+      submenu: iconSubmenu
     }));
 
     return this.updateMenu(menuItem);
@@ -186,5 +208,11 @@ export class SpoofProfileModule extends WebSocketModule {
     };
 
     await connection.updateChatMeRank(rankBody);
+  }
+
+  async spoofIcon(iconId: number): Promise<void> {
+    const iconBody = new LOLChatIcon({icon: iconId});
+
+    await connection.changeIcon(iconBody);
   }
 }
