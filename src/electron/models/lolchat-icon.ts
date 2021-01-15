@@ -1,5 +1,5 @@
 import { Model } from '../api';
 
-export class LOLChatMe extends Model {
+export class LOLChatIcon extends Model {
   icon: number;
 }

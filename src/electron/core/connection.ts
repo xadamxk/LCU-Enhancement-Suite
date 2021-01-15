@@ -3,7 +3,8 @@ import { LeagueConnection } from '../../connector';
 import { Subscription } from '../api';
 import { Endpoints } from '../enums';
 import { FriendRequest } from '../models/friend-request';
-import { LOLChatMe } from '../models/lolchat-me';
+import { LOLChatIcon } from '../models/lolchat-icon';
+import { LOLChatRank } from '../models/lolchat-rank';
 
 let connection: LeagueConnection = null;
 
@@ -23,44 +24,49 @@ declare module '../../connector' {
     getBalance(): Promise<Response>
     getFriends(): Promise<Response>
     sendFriendRequest(friendRequest: FriendRequest): Promise<Response>;
-    updateChatMe(icon: LOLChatMe): Promise<Response>;
+    changeIcon(icon: LOLChatIcon): Promise<Response>;
+    updateChatMeRank(rankBody: LOLChatRank): Promise<Response>;
   }
 }
 
-LeagueConnection.prototype.addSubscription = function(this: LeagueConnection, subscription: Subscription): void {
+LeagueConnection.prototype.addSubscription = function(this, subscription): void {
   this.subscribe(subscription.getPath(), subscription.getEventType(), subscription.getListener().bind(subscription));
 };
 
-LeagueConnection.prototype.removeSubscription = function(this: LeagueConnection, subscription: Subscription): void {
+LeagueConnection.prototype.removeSubscription = function(this, subscription): void {
   this.unsubscribe(subscription.getPath(), subscription.getEventType(), subscription.getListener().bind(subscription));
 };
 
-LeagueConnection.prototype.inviteSummoners = async function(this: LeagueConnection, ...summonerIds: number[]): Promise<Response> {
+LeagueConnection.prototype.inviteSummoners = async function(this, ...summonerIds): Promise<Response> {
   return await this.post(Endpoints.INVITATIONS, summonerIds.map((summonerId: number) => new Object({ 'toSummonerId': summonerId })));
 };
 
-LeagueConnection.prototype.getLoot = async function(this: LeagueConnection): Promise<Response> {
+LeagueConnection.prototype.getLoot = async function(this): Promise<Response> {
   return await this.get(Endpoints.LOOT_MAP);
 };
 
 // Example: /lol-loot/v1/recipes/CHAMPION_RENTAL_disenchant/craft?repeat=2
 // Body:    ["CHAMPION_SKIN_RENTAL_8003"]
-LeagueConnection.prototype.disenchantLoot = async function(this: LeagueConnection, lootId: string, lootType: string, repeatCount = 1): Promise<Response> {
+LeagueConnection.prototype.disenchantLoot = async function(this, lootId, lootType, repeatCount = 1): Promise<Response> {
   return await this.post(`${Endpoints.LOOT_RECIPES}/${lootType}_disenchant/craft?repeat=${repeatCount}`, [lootId]);
 };
 
-LeagueConnection.prototype.getBalance = async function(this: LeagueConnection) : Promise<Response> {
+LeagueConnection.prototype.getBalance = async function(this) : Promise<Response> {
   return await this.get(Endpoints.WALLET);
 };
 
-LeagueConnection.prototype.getFriends = async function(this: LeagueConnection) : Promise<Response> {
+LeagueConnection.prototype.getFriends = async function(this) : Promise<Response> {
   return await this.get(Endpoints.FRIENDS);
 };
 
-LeagueConnection.prototype.sendFriendRequest = async function(this: LeagueConnection, friendRequest: FriendRequest): Promise<Response> {
+LeagueConnection.prototype.sendFriendRequest = async function(this, friendRequest): Promise<Response> {
   return await this.post(Endpoints.FRIEND_REQUESTS, friendRequest);
 };
 
-LeagueConnection.prototype.updateChatMe = async function(this: LeagueConnection, icon: LOLChatMe): Promise<Response> {
-  return await this.put(Endpoints.CHAT_ME, icon);
+LeagueConnection.prototype.changeIcon = async function(this, iconCode): Promise<Response> {
+  return await this.put(Endpoints.CHAT_ME, iconCode);
+};
+
+LeagueConnection.prototype.updateChatMeRank = async function(this, rankBody): Promise<Response> {
+  return await this.put(Endpoints.CHAT_ME, rankBody);
 };
