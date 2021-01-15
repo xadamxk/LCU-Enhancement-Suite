@@ -63,8 +63,8 @@ LeagueConnection.prototype.sendFriendRequest = async function(this, friendReques
   return await this.post(Endpoints.FRIEND_REQUESTS, friendRequest);
 };
 
-LeagueConnection.prototype.changeIcon = async function(this, icon): Promise<Response> {
-  return await this.put(Endpoints.CHAT_ME, icon);
+LeagueConnection.prototype.changeIcon = async function(this, iconCode): Promise<Response> {
+  return await this.put(Endpoints.CHAT_ME, iconCode);
 };
 
 LeagueConnection.prototype.updateChatMeRank = async function(this, rankBody): Promise<Response> {
