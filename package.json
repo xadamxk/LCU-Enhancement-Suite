@@ -2,7 +2,12 @@
   "name": "lcu-enhancement-suite",
   "version": "1.0.0-beta",
   "description": "Enhancements for the League of Legends client.",
-  "author": "",
+  "author": "xadamxk",
+  "contributors": [
+    "TyrantKingBen (https://github.com/TyrantKingBen)",
+    "xadamxk (https://github.com/xadamxk)"
+  ],
+  "homepage": "https://github.com/xadamxk/LCU-Enhancement-Suite",
   "main": "./dist/electron/main.js",
   "private": true,
   "scripts": {
