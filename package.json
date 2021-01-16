@@ -1,10 +1,21 @@
 {
   "name": "lcu-enhancement-suite",
-  "version": "0.0.1",
+  "version": "1.0.0-beta1",
   "description": "Enhancements for the League of Legends client.",
-  "author": "",
+  "author": "xadamxk",
+  "contributors": [
+    "TyrantKingBen (https://github.com/TyrantKingBen)",
+    "xadamxk (https://github.com/xadamxk)"
+  ],
+  "homepage": "https://github.com/xadamxk/LCU-Enhancement-Suite",
+  "bugs": "https://github.com/xadamxk/LCU-Enhancement-Suite/issues",
   "main": "./dist/electron/main.js",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xadamxk/LCU-Enhancement-Suite"
+  },
+  "license": "MIT",
   "scripts": {
     "start": "npm-run-all --parallel --race electron:serve ng:serve",
     "build": "npm run electron:build -- --mode none && npm run ng:build",
