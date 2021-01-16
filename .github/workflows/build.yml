@@ -26,6 +26,8 @@ jobs:
         uses: samuelmeuli/action-electron-builder@v1
         with:
           #
+          args: "build"
+          #
           build_script_name: "build:prod"
 
           # GitHub token, automatically provided to the action
