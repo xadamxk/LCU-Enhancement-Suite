@@ -26,8 +26,9 @@ jobs:
         uses: samuelmeuli/action-electron-builder@v1
         with:
           #
-          args: "build"
-          #
+          args: "-p always"
+
+          # Name of the optional NPM build script which is executed before `electron-builder`
           build_script_name: "build:prod"
 
           # GitHub token, automatically provided to the action
