@@ -1,6 +1,6 @@
 {
   "name": "lcu-enhancement-suite",
-  "version": "0.0.1",
+  "version": "1.0.0-beta",
   "description": "Enhancements for the League of Legends client.",
   "author": "",
   "main": "./dist/electron/main.js",
