@@ -21,7 +21,7 @@ Running as a background application, found in your system tray, LCU Enhancement 
 - Auto accept queue prompt
 
 
-
+# Development
 ### Install Dependencies
 ```
 npm i
@@ -52,6 +52,9 @@ npm run electron:watch
 ```
 npm run package
 ```
+
+### CI/CD Pipeline
+Commits trigger CodeQL analysis that build the application and add a status check to pull requests. Commits to master with a version tag (format v#.#.#) trigger the release job to build and create a release draft. The release draft requires manual review.
 
 ## Riot Games
 
