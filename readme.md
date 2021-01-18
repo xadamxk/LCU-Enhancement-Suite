@@ -8,16 +8,17 @@ Running as a background application, found in your system tray, LCU Enhancement 
 - Quick invite recently played players
 - Quick invite players by friend group
 - Advanced loot disenchantment for owned & unowned resources including:
-  - Champion Capsules
-  - Champion Shards
-  - Eternal Set Shards
-  - Summoner Icons
-  - Skin Shards
-  - Ward Skin Shards
+     - Champion Capsules
+     - Champion Shards
+     - Eternal Set Shards
+     - Summoner Icons
+     - Skin Shards
+     - Ward Skin Shards
 - Import & export friends across accounts
 - Spoof profile properties including:
-  - Rank (Friends List)
-  - Icon (Friends List)
+     - Availability (Friends List)
+     - Icon (Friends List)
+     - Rank (Friends List)
 - Auto accept queue prompt
 
 
