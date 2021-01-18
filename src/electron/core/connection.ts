@@ -5,6 +5,7 @@ import { Endpoints } from '../enums';
 import { FriendRequest } from '../models/friend-request';
 import { LOLChatIcon } from '../models/lolchat-icon';
 import { LOLChatRank } from '../models/lolchat-rank';
+import { LOLChatAvailability } from '../models/lolchat-availability';
 
 let connection: LeagueConnection = null;
 
@@ -26,6 +27,7 @@ declare module '../../connector' {
     sendFriendRequest(friendRequest: FriendRequest): Promise<Response>;
     changeIcon(icon: LOLChatIcon): Promise<Response>;
     updateChatMeRank(rankBody: LOLChatRank): Promise<Response>;
+    changeAvailability(availability: LOLChatAvailability): Promise<Response>;
   }
 }
 
@@ -65,6 +67,10 @@ LeagueConnection.prototype.sendFriendRequest = async function(this, friendReques
 
 LeagueConnection.prototype.changeIcon = async function(this, iconCode): Promise<Response> {
   return await this.put(Endpoints.CHAT_ME, iconCode);
+};
+
+LeagueConnection.prototype.changeAvailability = async function(this, availability): Promise<Response> {
+  return await this.put(Endpoints.CHAT_ME, availability);
 };
 
 LeagueConnection.prototype.updateChatMeRank = async function(this, rankBody): Promise<Response> {

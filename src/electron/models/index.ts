@@ -6,3 +6,4 @@ export * from './recently-played-summoner';
 export * from './friend-request';
 export * from './lolchat-icon';
 export * from './lolchat-rank';
+export * from './lolchat-availability';
