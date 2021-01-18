@@ -83,11 +83,6 @@ export class SpoofProfileModule extends WebSocketModule {
       }));
     });
 
-    submenu.append(new MenuItem({
-      label: 'Chat Rank',
-      submenu: rankSubmenu
-    }));
-
     /* Spoof Profile Icon */
     const icons = {
       'Unreleased':[
@@ -179,9 +174,37 @@ export class SpoofProfileModule extends WebSocketModule {
       }));
     });
 
+    /* Spoof Profile Icon */
+    const availabilitiesSubmenu = new Menu();
+    const availabilities = [
+      {'value':'away', 'display': 'Away'},
+      // {'value':'dnd', 'display': 'In Game'}, // Doesn't work with availability alone
+      {'value':'chat', 'display': 'Online'},
+      {'value':'offline', 'display': 'Offline'},
+      {'value':'mobile', 'display': 'Mobile'}
+    ];
+
+    availabilities.forEach(availability => {
+      availabilitiesSubmenu.append(new MenuItem({
+        label: availability['display'],
+        click: async() => this.spoofAvailability(availability['value'])
+      }));
+    });
+
+    /* Append submenus to main menu item */
+    submenu.append(new MenuItem({
+      label: 'Chat Availability',
+      submenu: availabilitiesSubmenu
+    }));
+
     submenu.append(new MenuItem({
       label: 'Chat Icon',
       submenu: iconSubmenu
+    }));
+
+    submenu.append(new MenuItem({
+      label: 'Chat Rank',
+      submenu: rankSubmenu
     }));
 
     return this.updateMenu(menuItem);
@@ -189,6 +212,12 @@ export class SpoofProfileModule extends WebSocketModule {
 
   async refresh(event: LeagueEvent = null): Promise<void> {
     //
+  }
+
+  async spoofAvailability(availability: string): Promise<void> {
+    const availityBody = {'availability': availability};
+
+    await connection.changeAvailability(availityBody);
   }
 
   async spoofRank(queueType: string, division: string, tier: string): Promise<void> {
