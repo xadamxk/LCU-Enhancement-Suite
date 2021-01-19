@@ -1,10 +1,12 @@
 export enum Endpoints {
   CHAT_ME = '/lol-chat/v1/me',
+  END_OF_GAME_STATS = '/lol-end-of-game/v1/eog-stats-block',
   INVITATIONS = '/lol-lobby/v2/lobby/invitations',
   FRIEND_GROUPS = '/lol-chat/v1/friend-groups',
   FRIENDS = '/lol-chat/v1/friends',
   FRIEND_REQUESTS = '/lol-chat/v1/friend-requests',
   GAMEFLOW_PHASE = '/lol-gameflow/v1/gameflow-phase',
+  GAME_VERSION = '/lol-patch/v1/game-version',
   LOOT_MAP = '/lol-loot/v1/player-loot-map',
   LOOT_RECIPES = '/lol-loot/v1/recipes',
   READY_CHECK = '/lol-matchmaking/v1/ready-check',
