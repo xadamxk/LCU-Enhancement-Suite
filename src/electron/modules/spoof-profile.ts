@@ -10,6 +10,8 @@ import { LOLChatIcon, LOLChatRank } from '../models';
 
 export class SpoofProfileModule extends WebSocketModule {
   id = 'SpoofProfile';
+  selectedAvailability = null;
+
   // Spoof Rank
   tiers = [
     'IV',
@@ -183,11 +185,18 @@ export class SpoofProfileModule extends WebSocketModule {
       {'value':'offline', 'display': 'Offline'},
       {'value':'mobile', 'display': 'Mobile'}
     ];
+    this.selectedAvailability = this.storage.get('availability', availabilities[1]);
+    this.spoofAvailability(this.selectedAvailability['value']);
 
     availabilities.forEach(availability => {
       availabilitiesSubmenu.append(new MenuItem({
         label: availability['display'],
-        click: async() => this.spoofAvailability(availability['value'])
+        type: 'radio',
+        checked: this.selectedAvailability == availability ? true : false,
+        click: async() => {
+          this.storage.set('availability', availability);
+          await this.spoofAvailability(availability['value']);
+        }
       }));
     });
 

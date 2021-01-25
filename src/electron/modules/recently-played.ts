@@ -80,6 +80,9 @@ export class RecentlyPlayedModule extends WebSocketModule {
 
       menuItem.sublabel = '';
       return this.updateMenu(menuItem);
+    } else {
+      menuItem.sublabel = 'Failed to Load';
+      return this.updateMenu(menuItem);
     }
   }
 }

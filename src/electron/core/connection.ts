@@ -80,5 +80,4 @@ LeagueConnection.prototype.updateChatMeRank = async function(this, rankBody): Pr
 
 LeagueConnection.prototype.getCurrentVersion = async function(this): Promise<Response> {
   return await this.get(Endpoints.GAME_VERSION);
-
 };
