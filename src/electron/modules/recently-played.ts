@@ -57,7 +57,7 @@ export class RecentlyPlayedModule extends WebSocketModule {
       // reverse order of games to show most recent game first
       Object.keys(summonersByGame).reverse().forEach((gameId, index, reversedGameIds) => {
         // append each unique player in game
-        summonersByGame[gameId].forEach((summoner: RecentlyPlayedSummoner) => {
+        summonersByGame[gameId].forEach(async(summoner: RecentlyPlayedSummoner) => {
           submenu.append(new MenuItem({
             label: summoner.summonerName,
             sublabel: `Played: ${summoner.gameCreationDate.fromNow()}`,
@@ -84,5 +84,10 @@ export class RecentlyPlayedModule extends WebSocketModule {
       menuItem.sublabel = 'Failed to Load';
       return this.updateMenu(menuItem);
     }
+  }
+
+  private async getChampionIcon(championId: number): Promise<string> {
+    const championIcon = await connection.getChampionIcon(championId);
+    return championIcon.url;
   }
 }
