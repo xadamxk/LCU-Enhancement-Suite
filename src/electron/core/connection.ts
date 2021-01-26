@@ -28,6 +28,8 @@ declare module '../../connector' {
     changeIcon(icon: LOLChatIcon): Promise<Response>;
     updateChatMeRank(rankBody: LOLChatRank): Promise<Response>;
     changeAvailability(availability: LOLChatAvailability): Promise<Response>;
+    getCurrentVersion(): Promise<Response>;
+    getChampionIcon(championId: number): Promise<Response>;
   }
 }
 
@@ -75,4 +77,12 @@ LeagueConnection.prototype.changeAvailability = async function(this, availabilit
 
 LeagueConnection.prototype.updateChatMeRank = async function(this, rankBody): Promise<Response> {
   return await this.put(Endpoints.CHAT_ME, rankBody);
+};
+
+LeagueConnection.prototype.getCurrentVersion = async function(this): Promise<Response> {
+  return await this.get(Endpoints.GAME_VERSION);
+};
+
+LeagueConnection.prototype.getChampionIcon = async function(championId): Promise<Response> {
+  return await this.get(`/lol-game-data/assets/v1/champion-icons/${championId}.png`);
 };

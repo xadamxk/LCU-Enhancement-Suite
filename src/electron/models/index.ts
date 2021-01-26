@@ -7,3 +7,7 @@ export * from './friend-request';
 export * from './lolchat-icon';
 export * from './lolchat-rank';
 export * from './lolchat-availability';
+export * from './eog-data';
+export * from './eog-player';
+export * from './eog-stats';
+export * from './eog-team';
