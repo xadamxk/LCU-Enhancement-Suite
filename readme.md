@@ -4,6 +4,8 @@ A compilation of features to enhance your League of Legends experience.
 
 Running as a background application, found in your system tray, LCU Enhancement Suite features can be found by right clicking the application icon. 
 
+![Feature Highlight GIF](https://github.com/xadamxk/LCU-Enhancement-Suite/blob/master/images/LCU-Enhancement-Suite-1.0.3.gif?raw=true)
+
 ## Features
 - Quick invite recently played players
 - Quick invite players by friend group
