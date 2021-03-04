@@ -20,9 +20,9 @@ const modules: Module[] = [
   new InviteGroupModule(),
   new DisenchantLootModule(),
   new FriendsListModule(),
-  new SpoofProfileModule(),
-  new AutoAcceptQueueModule(),
-  new EndOfGameListenerModule()
+  new SpoofProfileModule()
+  // new AutoAcceptQueueModule(),
+  // new EndOfGameListenerModule()
 ];
 
 export { modules };
