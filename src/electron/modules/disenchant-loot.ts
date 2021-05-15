@@ -31,6 +31,11 @@ export class DisenchantLootModule extends Module {
     }));
 
     submenu.append(new MenuItem({
+      label: 'Key Fragments',
+      click: async() => this.disenchantKeyFragments()
+    }));
+
+    submenu.append(new MenuItem({
       label: 'Summoner Icons',
       click: async() => this.disenchantIconShards()
     }));
@@ -46,6 +51,33 @@ export class DisenchantLootModule extends Module {
     }));
 
     return this.updateMenu(menuItem);
+  }
+
+  private async disenchantKeyFragments(): Promise<void> {
+    const keyFragmentsPerKey = 3;
+    const allLoot = await this.getLoot();
+    const keyFragmentLoot = Object.entries(allLoot).filter(([lootKey]) => {
+      return lootKey == 'MATERIAL_key_fragment';
+    });
+    if (keyFragmentLoot.length > 0 &&
+      keyFragmentLoot[0].length > 0 &&
+      // eslint-disable-next-line no-prototype-builtins
+      keyFragmentLoot[0][1].hasOwnProperty('count')) {
+      const keyFragmentCount = keyFragmentLoot[0][1]['count'];
+      if (keyFragmentCount < keyFragmentsPerKey) {
+        // Not enough key fragments
+        await this.showInsufficientResourcesDialogue('Key', 'Key Fragments');
+      }
+      const totalKeys = Math.floor(keyFragmentCount/keyFragmentsPerKey);
+
+      const disenchantResponse = await connection.forgeLoot('MATERIAL_key_fragment_forge', ['MATERIAL_key_fragment'], totalKeys);
+      console.log(disenchantResponse);
+      return disenchantResponse.json();
+    } else {
+      // key fragment loot object doesn't exist
+      // Not sure if this is actually possible but oh well
+      await this.showInsufficientResourcesDialogue('Key', 'Key Fragments');
+    }
   }
 
   private async disenchantChampionCapsules(): Promise<void> {
@@ -75,13 +107,14 @@ export class DisenchantLootModule extends Module {
   private async disenchantChests(lootCategoryFilter: LootCategories, lootType: LootTypes): Promise<void> {
     const prettyCategory = lootCategoryFilter.toLowerCase().replace('_', ' ');
     const allLoot = await this.getLoot();
-    console.log(allLoot);
+    // console.log(allLoot);
 
-    const allCategoryLoot = Object.values(allLoot).filter((lootItem) => {
+    const filteredLoot = Object.values(allLoot).filter((lootItem) => {
       return lootItem[lootType] === lootCategoryFilter;
     });
 
-    if (allCategoryLoot.length > 0) {
+    if (filteredLoot.length > 0) {
+      console.log(filteredLoot);
       // TODO: Find endpoint to open champion capsule/chests
     } else {
       await this.showNoResourcesDialogue(prettyCategory);
@@ -91,7 +124,7 @@ export class DisenchantLootModule extends Module {
   private async disenchantShards(lootCategoryFilter: LootCategories, lootType: LootTypes): Promise<void> {
     const prettyCategory = lootCategoryFilter.toLowerCase().replace('_', ' ');
     const allLoot = await this.getLoot();
-    console.log(allLoot);
+    // console.log(allLoot);
 
     const allCategoryLoot = Object.values(allLoot).filter((lootItem) => {
       return lootItem[lootType] === lootCategoryFilter;
@@ -165,6 +198,13 @@ export class DisenchantLootModule extends Module {
     await dialog.showMessageBox(null, {
       title: `No ${prettyCategory} shards found.`,
       message: `It doesn't look like you have any ${prettyCategory} shards.\nCome back later when you do.`
+    });
+  }
+
+  private async showInsufficientResourcesDialogue(recipeOutput: string, componentName: string): Promise<void> {
+    await dialog.showMessageBox(null, {
+      title: `Failed to craft ${recipeOutput}`,
+      message: `It doesn't look like you have enough ${componentName}.\nCome back later when you do.`
     });
   }
 }
