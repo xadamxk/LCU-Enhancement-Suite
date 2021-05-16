@@ -22,6 +22,7 @@ declare module '../../connector' {
     inviteSummoners(...summonerIds: number[]): Promise<Response>
     getLoot(): Promise<Response>
     disenchantLoot(lootId: string, lootType: string, repeatCount: number): Promise<Response>
+    forgeLoot(recipeName: string, componentLootIds: string[], repeatCount: number): Promise<Response>
     getBalance(): Promise<Response>
     getFriends(): Promise<Response>
     sendFriendRequest(friendRequest: FriendRequest): Promise<Response>;
@@ -53,6 +54,12 @@ LeagueConnection.prototype.getLoot = async function(this): Promise<Response> {
 // Body:    ["CHAMPION_SKIN_RENTAL_8003"]
 LeagueConnection.prototype.disenchantLoot = async function(this, lootId, lootType, repeatCount = 1): Promise<Response> {
   return await this.post(`${Endpoints.LOOT_RECIPES}/${lootType}_disenchant/craft?repeat=${repeatCount}`, [lootId]);
+};
+
+// Example: /lol-loot/v1/recipes/MATERIAL_key_fragment_forge/craft
+// Body: ["MATERIAL_key_fragment"]
+LeagueConnection.prototype.forgeLoot = async function(this, recipeName, componentLootIds, repeatCount = 1): Promise<Response> {
+  return await this.post(`${Endpoints.LOOT_RECIPES}/${recipeName}/craft?repeat=${repeatCount}`, componentLootIds);
 };
 
 LeagueConnection.prototype.getBalance = async function(this) : Promise<Response> {
