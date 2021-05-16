@@ -81,7 +81,7 @@ export class DisenchantLootModule extends Module {
   }
 
   private async disenchantChampionCapsules(): Promise<void> {
-    return this.disenchantChests(LootCategories.CHAMPION_CAPSULE, LootTypes.LOOT_ID);
+    return this.disenchantChests('CHEST_128_OPEN', LootCategories.CHAMPION_CAPSULE, LootTypes.LOOT_ID);
   }
 
   private async disenchantChampionShards(): Promise<void> {
@@ -104,18 +104,19 @@ export class DisenchantLootModule extends Module {
     return this.disenchantShards(LootCategories.SUMMONER_ICON, LootTypes.DISPLAY_CATEGORIES);
   }
 
-  private async disenchantChests(lootCategoryFilter: LootCategories, lootType: LootTypes): Promise<void> {
-    const prettyCategory = lootCategoryFilter.toLowerCase().replace('_', ' ');
+  private async disenchantChests(recipeName: string, lootCategoryFilter: LootCategories, lootType: LootTypes): Promise<void> {
+    const prettyCategory = 'Chest(s)';
     const allLoot = await this.getLoot();
-    // console.log(allLoot);
 
     const filteredLoot = Object.values(allLoot).filter((lootItem) => {
       return lootItem[lootType] === lootCategoryFilter;
     });
 
     if (filteredLoot.length > 0) {
-      console.log(filteredLoot);
-      // TODO: Find endpoint to open champion capsule/chests
+      const chestCount = filteredLoot[0]['count'];
+      const disenchantResponse = await connection.forgeLoot(recipeName, [lootCategoryFilter], chestCount);
+      console.log(disenchantResponse);
+      return disenchantResponse.json();
     } else {
       await this.showNoResourcesDialogue(prettyCategory);
     }
