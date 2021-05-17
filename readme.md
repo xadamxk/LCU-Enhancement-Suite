@@ -16,6 +16,7 @@ Running as a background application, found in your system tray, LCU Enhancement 
      - Summoner Icons
      - Skin Shards
      - Ward Skin Shards
+     - Forge Key Fragments
 - Import & export friends across accounts
 - Spoof profile properties including:
      - Availability (Friends List)
