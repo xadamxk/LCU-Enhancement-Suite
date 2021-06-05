@@ -121,6 +121,9 @@ export class DisenchantLootModule extends Module {
   }
 
   private async disenchantEternalShards(): Promise<void> {
+    // TODO: Needs custom logic due to Eternals having unique keys
+    // STATSTONE_SHARD_66600016 (type:STATSTONE_SHARD)
+    // Recipe: STATSTONE_SHARD_DISENCHANT, STATSTONE_SHARD_UPGRADE
     return this.disenchantShards(LootCategories.ETERNALS, LootTypes.DISPLAY_CATEGORIES);
   }
 
