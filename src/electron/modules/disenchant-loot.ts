@@ -26,6 +26,11 @@ export class DisenchantLootModule extends Module {
     }));
 
     submenu.append(new MenuItem({
+      label: 'Open Chests',
+      click: async() => this.openChests()
+    }));
+
+    submenu.append(new MenuItem({
       label: 'Eternals Set Shards',
       click: async() => this.disenchantEternalShards()
     }));
@@ -51,6 +56,25 @@ export class DisenchantLootModule extends Module {
     }));
 
     return this.updateMenu(menuItem);
+  }
+
+  private async openChests(): Promise<void> {
+    const allLoot = await this.getLoot();
+    const chestLoot = Object.entries(allLoot).filter(([lootKey]) => {
+      return lootKey == 'CHEST_champion_mastery';
+    });
+    const keyLoot = Object.entries(allLoot).filter(([lootKey]) => {
+      return lootKey == 'MATERIAL_key';
+    });
+    if (chestLoot.length < 1) {
+      await this.showInsufficientResourcesDialogue('Open Chest', 'Chests');
+    } else if (keyLoot.length < 1) {
+      await this.showInsufficientResourcesDialogue('Open Chest', 'Keys');
+    } else {
+      const disenchantResponse = await connection.forgeLoot('CHEST_champion_mastery_OPEN', ['CHEST_champion_mastery', 'MATERIAL_key'], chestLoot.length);
+      console.log(disenchantResponse);
+      return disenchantResponse.json();
+    }
   }
 
   private async disenchantKeyFragments(): Promise<void> {
