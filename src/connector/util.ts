@@ -32,6 +32,7 @@ XWehWA==
 }
 
 export function readLockfile(): string {
+  // TODO: OSX & Linux
   const re = process.platform === 'win32' ? /"--install-directory=(.*?)"/ : /--install-directory=(.*?)( --|\n|$)/;
   const cmd = process.platform === 'win32' ? 'WMIC PROCESS WHERE name=\'LeagueClientUx.exe\' GET CommandLine' : 'ps x -o args | grep \'LeagueClientUx\'';
 

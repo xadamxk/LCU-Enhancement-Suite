@@ -105,7 +105,24 @@ export class DisenchantLootModule extends Module {
   }
 
   private async disenchantChampionCapsules(): Promise<void> {
-    return this.disenchantChests('CHEST_128_OPEN', LootCategories.CHAMPION_CAPSULE, LootTypes.LOOT_ID);
+    const recipeName = 'CHEST_128_OPEN';
+    const lootCategoryFilter = LootCategories.CHAMPION_CAPSULE;
+    const lootType = LootTypes.LOOT_ID;
+    const prettyCategory = 'Chest(s)';
+    const allLoot = await this.getLoot();
+
+    const filteredLoot = Object.values(allLoot).filter((lootItem) => {
+      return lootItem[lootType] === lootCategoryFilter;
+    });
+
+    if (filteredLoot.length > 0) {
+      const chestCount = filteredLoot[0]['count'];
+      const disenchantResponse = await connection.forgeLoot(recipeName, [lootCategoryFilter], chestCount);
+      console.log(disenchantResponse);
+      return disenchantResponse.json();
+    } else {
+      await this.showNoResourcesDialogue(prettyCategory);
+    }
   }
 
   private async disenchantChampionShards(): Promise<void> {
@@ -124,35 +141,17 @@ export class DisenchantLootModule extends Module {
     // TODO: Needs custom logic due to Eternals having unique keys
     // STATSTONE_SHARD_66600016 (type:STATSTONE_SHARD)
     // Recipe: STATSTONE_SHARD_DISENCHANT, STATSTONE_SHARD_UPGRADE
-    return this.disenchantShards(LootCategories.ETERNALS, LootTypes.DISPLAY_CATEGORIES);
+    // "redeemableStatus": "ALREADY_OWNED",
+    // return this.disenchantShards(LootCategories.ETERNALS, LootTypes.DISPLAY_CATEGORIES);
   }
 
   private async disenchantIconShards(): Promise<void> {
     return this.disenchantShards(LootCategories.SUMMONER_ICON, LootTypes.DISPLAY_CATEGORIES);
   }
 
-  private async disenchantChests(recipeName: string, lootCategoryFilter: LootCategories, lootType: LootTypes): Promise<void> {
-    const prettyCategory = 'Chest(s)';
-    const allLoot = await this.getLoot();
-
-    const filteredLoot = Object.values(allLoot).filter((lootItem) => {
-      return lootItem[lootType] === lootCategoryFilter;
-    });
-
-    if (filteredLoot.length > 0) {
-      const chestCount = filteredLoot[0]['count'];
-      const disenchantResponse = await connection.forgeLoot(recipeName, [lootCategoryFilter], chestCount);
-      console.log(disenchantResponse);
-      return disenchantResponse.json();
-    } else {
-      await this.showNoResourcesDialogue(prettyCategory);
-    }
-  }
-
   private async disenchantShards(lootCategoryFilter: LootCategories, lootType: LootTypes): Promise<void> {
     const prettyCategory = lootCategoryFilter.toLowerCase().replace('_', ' ');
     const allLoot = await this.getLoot();
-    // console.log(allLoot);
 
     const allCategoryLoot = Object.values(allLoot).filter((lootItem) => {
       return lootItem[lootType] === lootCategoryFilter;
