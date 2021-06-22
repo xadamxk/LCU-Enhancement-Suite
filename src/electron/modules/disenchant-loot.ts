@@ -26,6 +26,11 @@ export class DisenchantLootModule extends Module {
     }));
 
     submenu.append(new MenuItem({
+      label: 'Open Chests',
+      click: async() => this.openChests()
+    }));
+
+    submenu.append(new MenuItem({
       label: 'Eternals Set Shards',
       click: async() => this.disenchantEternalShards()
     }));
@@ -51,6 +56,25 @@ export class DisenchantLootModule extends Module {
     }));
 
     return this.updateMenu(menuItem);
+  }
+
+  private async openChests(): Promise<void> {
+    const allLoot = await this.getLoot();
+    const chestLoot = Object.entries(allLoot).filter(([lootKey]) => {
+      return lootKey == 'CHEST_champion_mastery';
+    });
+    const keyLoot = Object.entries(allLoot).filter(([lootKey]) => {
+      return lootKey == 'MATERIAL_key';
+    });
+    if (chestLoot.length < 1) {
+      await this.showInsufficientResourcesDialogue('Open Chest', 'Chests');
+    } else if (keyLoot.length < 1) {
+      await this.showInsufficientResourcesDialogue('Open Chest', 'Keys');
+    } else {
+      const disenchantResponse = await connection.forgeLoot('CHEST_champion_mastery_OPEN', ['CHEST_champion_mastery', 'MATERIAL_key'], chestLoot.length);
+      console.log(disenchantResponse);
+      return disenchantResponse.json();
+    }
   }
 
   private async disenchantKeyFragments(): Promise<void> {
@@ -81,30 +105,9 @@ export class DisenchantLootModule extends Module {
   }
 
   private async disenchantChampionCapsules(): Promise<void> {
-    return this.disenchantChests('CHEST_128_OPEN', LootCategories.CHAMPION_CAPSULE, LootTypes.LOOT_ID);
-  }
-
-  private async disenchantChampionShards(): Promise<void> {
-    return this.disenchantShards(LootCategories.CHAMPION, LootTypes.DISPLAY_CATEGORIES);
-  }
-
-  private async disenchantSkinShards(): Promise<void> {
-    return this.disenchantShards(LootCategories.SKIN, LootTypes.DISPLAY_CATEGORIES);
-  }
-
-  private async disenchantWardSkinShards(): Promise<void> {
-    return this.disenchantShards(LootCategories.WARD_SKIN, LootTypes.DISPLAY_CATEGORIES);
-  }
-
-  private async disenchantEternalShards(): Promise<void> {
-    return this.disenchantShards(LootCategories.ETERNALS, LootTypes.DISPLAY_CATEGORIES);
-  }
-
-  private async disenchantIconShards(): Promise<void> {
-    return this.disenchantShards(LootCategories.SUMMONER_ICON, LootTypes.DISPLAY_CATEGORIES);
-  }
-
-  private async disenchantChests(recipeName: string, lootCategoryFilter: LootCategories, lootType: LootTypes): Promise<void> {
+    const recipeName = 'CHEST_128_OPEN';
+    const lootCategoryFilter = LootCategories.CHAMPION_CAPSULE;
+    const lootType = LootTypes.LOOT_ID;
     const prettyCategory = 'Chest(s)';
     const allLoot = await this.getLoot();
 
@@ -122,10 +125,33 @@ export class DisenchantLootModule extends Module {
     }
   }
 
+  private async disenchantChampionShards(): Promise<void> {
+    return this.disenchantShards(LootCategories.CHAMPION, LootTypes.DISPLAY_CATEGORIES);
+  }
+
+  private async disenchantSkinShards(): Promise<void> {
+    return this.disenchantShards(LootCategories.SKIN, LootTypes.DISPLAY_CATEGORIES);
+  }
+
+  private async disenchantWardSkinShards(): Promise<void> {
+    return this.disenchantShards(LootCategories.WARD_SKIN, LootTypes.DISPLAY_CATEGORIES);
+  }
+
+  private async disenchantEternalShards(): Promise<void> {
+    // TODO: Needs custom logic due to Eternals having unique keys
+    // STATSTONE_SHARD_66600016 (type:STATSTONE_SHARD)
+    // Recipe: STATSTONE_SHARD_DISENCHANT, STATSTONE_SHARD_UPGRADE
+    // "redeemableStatus": "ALREADY_OWNED",
+    // return this.disenchantShards(LootCategories.ETERNALS, LootTypes.DISPLAY_CATEGORIES);
+  }
+
+  private async disenchantIconShards(): Promise<void> {
+    return this.disenchantShards(LootCategories.SUMMONER_ICON, LootTypes.DISPLAY_CATEGORIES);
+  }
+
   private async disenchantShards(lootCategoryFilter: LootCategories, lootType: LootTypes): Promise<void> {
     const prettyCategory = lootCategoryFilter.toLowerCase().replace('_', ' ');
     const allLoot = await this.getLoot();
-    // console.log(allLoot);
 
     const allCategoryLoot = Object.values(allLoot).filter((lootItem) => {
       return lootItem[lootType] === lootCategoryFilter;
