@@ -24,6 +24,9 @@ Running as a background application, found in your system tray, LCU Enhancement 
      - Rank (Friends List)
 - Auto accept queue prompt
 
+## Download
+[Download Link](https://github.com/xadamxk/LCU-Enhancement-Suite/releases/latest)
+
 
 # Development
 ### Install Dependencies
