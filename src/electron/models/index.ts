@@ -11,3 +11,4 @@ export * from './eog-data';
 export * from './eog-player';
 export * from './eog-stats';
 export * from './eog-team';
+export * from './cs-champion';

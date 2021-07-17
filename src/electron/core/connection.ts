@@ -31,6 +31,7 @@ declare module '../../connector' {
     changeAvailability(availability: LOLChatAvailability): Promise<Response>;
     getCurrentVersion(): Promise<Response>;
     getChampionIcon(championId: number): Promise<Response>;
+    getChampionSelectChampions(): Promise<Response>;
   }
 }
 
@@ -92,4 +93,8 @@ LeagueConnection.prototype.getCurrentVersion = async function(this): Promise<Res
 
 LeagueConnection.prototype.getChampionIcon = async function(championId): Promise<Response> {
   return await this.get(`/lol-game-data/assets/v1/champion-icons/${championId}.png`);
+};
+
+LeagueConnection.prototype.getChampionSelectChampions = async function(): Promise<Response> {
+  return await this.get(Endpoints.CHAMPION_SELECT_ALL_CHAMPS);
 };
