@@ -3,7 +3,7 @@ import { StatusCode } from '../../connector';
 import { WebSocketModule } from '../api';
 import { connection } from '../core';
 import { Endpoints, GameflowPhase } from '../enums';
-import { RecentlyPlayedSummoner } from '../models';
+import { RecentlyPlayedSummoner, CSChampion } from '../models';
 import { GameflowPhaseSubscription } from '../subscriptions';
 
 export class RecentlyPlayedModule extends WebSocketModule {
@@ -29,6 +29,8 @@ export class RecentlyPlayedModule extends WebSocketModule {
       sublabel: 'Updating...',
       submenu: submenu
     });
+
+    const champions: CSChampion[] = await (await connection.getChampionSelectChampions()).json();
 
     await this.updateMenu(menuItem);
 
@@ -58,8 +60,14 @@ export class RecentlyPlayedModule extends WebSocketModule {
       Object.keys(summonersByGame).reverse().forEach((gameId, index, reversedGameIds) => {
         // append each unique player in game
         summonersByGame[gameId].forEach(async(summoner: RecentlyPlayedSummoner) => {
+          const championNameMatch = champions.filter((champion: CSChampion) => {
+            return champion.id == summoner.championId;
+          });
+
+          const championName = championNameMatch ? championNameMatch[0].name : 'N/A';
+
           submenu.append(new MenuItem({
-            label: summoner.summonerName,
+            label: `${summoner.summonerName} (${championName})`,
             sublabel: `Played: ${summoner.gameCreationDate.fromNow()}`,
             click: async() => {
               const response = await connection.inviteSummoners(summoner.summonerId);
