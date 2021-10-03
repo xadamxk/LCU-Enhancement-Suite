@@ -71,9 +71,7 @@ export class RecentlyPlayedModule extends WebSocketModule {
             sublabel: `Played: ${summoner.gameCreationDate.fromNow()}`,
             click: async() => {
               const response = await connection.inviteSummoners(summoner.summonerId);
-              console.log(response.status);
-              const json = await response.json();
-              console.log(json);
+              await response.json();
             }
           }));
         });
