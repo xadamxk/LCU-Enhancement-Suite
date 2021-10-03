@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DetailRoutingModule } from './detail/detail-routing.module';
 import { HomeRoutingModule } from './home/home-routing.module';
+import {ClashRoutingModule} from './clash/clash-routing.module';
 import { PageNotFoundComponent } from './shared/components';
 
 const routes: Routes = [
@@ -20,7 +21,8 @@ const routes: Routes = [
   imports: [
     RouterModule.forRoot(routes),
     HomeRoutingModule,
-    DetailRoutingModule
+    DetailRoutingModule,
+    ClashRoutingModule
   ],
   exports: [RouterModule]
 })

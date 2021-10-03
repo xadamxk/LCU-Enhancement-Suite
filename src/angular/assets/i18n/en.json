@@ -1,12 +1,17 @@
 {
   "PAGES": {
-      "HOME": {
-          "TITLE": "App works!",
-          "GO_TO_DETAIL": "Go to Detail"
-      },
-      "DETAIL": {
-        "TITLE": "Detail page!",
-        "BACK_TO_HOME": "Back to Home"
+    "HOME": {
+      "TITLE": "App works!",
+      "GO_TO_DETAIL": "Go to Detail",
+      "GO_TO_CLASH": "Go to Clash"
+    },
+    "DETAIL": {
+      "TITLE": "Detail page!",
+      "BACK_TO_HOME": "Back to Home"
+    },
+    "CLASH": {
+      "TITLE": "Clash page!",
+      "BACK_TO_HOME": "Back to Home"
     }
   }
 }

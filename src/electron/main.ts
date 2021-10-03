@@ -4,7 +4,7 @@ import { Module } from './api';
 import { app } from './core';
 import { modules } from './modules';
 
-app.init(process.env.NODE_ENV !== 'e2e');
+app.init(false);
 
 app.on('init-error', error => {
   const options: MessageBoxSyncOptions = {

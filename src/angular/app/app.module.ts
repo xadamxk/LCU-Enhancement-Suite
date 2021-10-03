@@ -11,6 +11,7 @@ import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { DetailModule } from './detail/detail.module';
 import { HomeModule } from './home/home.module';
+import { ClashModule } from './clash/clash.module';
 import { SharedModule } from './shared/shared.module';
 
 // AoT requires an exported function for factories
@@ -28,6 +29,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     SharedModule,
     HomeModule,
     DetailModule,
+    ClashModule,
     AppRoutingModule,
     TranslateModule.forRoot({
       loader: {

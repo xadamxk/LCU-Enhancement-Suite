@@ -32,6 +32,7 @@ declare module '../../connector' {
     getCurrentVersion(): Promise<Response>;
     getChampionIcon(championId: number): Promise<Response>;
     getChampionSelectChampions(): Promise<Response>;
+    getClashScoutingChampions(): Promise<Response>;
   }
 }
 
@@ -97,4 +98,8 @@ LeagueConnection.prototype.getChampionIcon = async function(championId): Promise
 
 LeagueConnection.prototype.getChampionSelectChampions = async function(): Promise<Response> {
   return await this.get(Endpoints.CHAMPION_SELECT_ALL_CHAMPS);
+};
+
+LeagueConnection.prototype.getClashScoutingChampions = async function(): Promise<Response> {
+  return await this.get(Endpoints.CLASH_SCOUTING_CHAMPIONS);
 };
