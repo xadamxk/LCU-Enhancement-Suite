@@ -5,6 +5,7 @@ import { InviteGroupModule } from './invite-group';
 import { RecentlyPlayedModule } from './recently-played';
 import { FriendsListModule } from './friends-list';
 import { SpoofProfileModule } from './spoof-profile';
+import { OpenBuildInBrowserModule } from './open-build-in-browser';
 // import { EndOfGameListenerModule } from './eog-listener';
 
 export * from './auto-accept-queue';
@@ -13,6 +14,7 @@ export * from './invite-group';
 export * from './recently-played';
 export * from './friends-list';
 export * from './spoof-profile';
+export * from './open-build-in-browser';
 // export * from './eog-listener';
 
 const modules: Module[] = [
@@ -21,7 +23,8 @@ const modules: Module[] = [
   new DisenchantLootModule(),
   new FriendsListModule(),
   new SpoofProfileModule(),
-  new AutoAcceptQueueModule()
+  new AutoAcceptQueueModule(),
+  new OpenBuildInBrowserModule()
   // new EndOfGameListenerModule()
 ];
 
