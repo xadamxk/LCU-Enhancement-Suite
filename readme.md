@@ -7,7 +7,7 @@ Running as a background application, found in your system tray, LCU Enhancement 
 ![Feature Highlight GIF](https://github.com/xadamxk/LCU-Enhancement-Suite/blob/master/images/LCU-Enhancement-Suite-1.0.3.gif?raw=true)
 
 ## Features
-- Open recommended build in browser during champion select (SR & ARAM ONLY) for the following providers:
+- Open recommended build in browser during champion select (ARAM ONLY - SR coming soon) for the following providers:
      - Blitz.gg
      - Lolalytics
      - Mobalytics
