@@ -7,6 +7,11 @@ Running as a background application, found in your system tray, LCU Enhancement 
 ![Feature Highlight GIF](https://github.com/xadamxk/LCU-Enhancement-Suite/blob/master/images/LCU-Enhancement-Suite-1.0.3.gif?raw=true)
 
 ## Features
+- Open recommended build in browser during champion select (SR & ARAM ONLY) for the following providers:
+     - Blitz.gg
+     - Lolalytics
+     - Mobalytics
+     - Op.gg
 - Quick invite recently played players
 - Quick invite players by friend group
 - Advanced loot disenchantment for owned & unowned resources including:
