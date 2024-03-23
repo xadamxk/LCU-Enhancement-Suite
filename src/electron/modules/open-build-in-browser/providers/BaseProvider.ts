@@ -49,7 +49,8 @@ export abstract class BaseProvider {
     const champion = champions.find((champion) => champion.id === championId);
 
     if (champion) {
-      return champion.name.toLowerCase();
+      // Remove spaces and ' from champion name
+      return champion.name.toLowerCase().replace(' ', '').replace("'", '');
     }
 
     throw new Error(`Champion with id ${championId} not found`);
