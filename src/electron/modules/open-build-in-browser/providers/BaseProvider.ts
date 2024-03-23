@@ -5,7 +5,8 @@ export enum PROVIDERS {
   'Blitz' = 'Blitz',
   'Lolalytics' = 'Lolalytics',
   'Mobalytics' = 'Mobalytics',
-  'OPGG' = 'OPGG'
+  'OPGG' = 'OPGG',
+  'UGG' = 'UGG',
 }
 // TODO: https://www.leagueofgraphs.com/
 // TODO: https://www.metasrc.com/

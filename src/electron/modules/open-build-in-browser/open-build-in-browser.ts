@@ -2,7 +2,7 @@ import { Menu, MenuItem, shell } from 'electron';
 import { WebSocketModule } from '../../api';
 import { connection } from '../../core';
 import { CSCurrentChampionSubscription, TBCurrentChampionSubscription } from '../../subscriptions';
-import { BlitzProvider, IProvider, LolalyticsProvider, MobalyticsProvider, OPGGProvider, PROVIDERS } from './providers';
+import { BlitzProvider, IProvider, LolalyticsProvider, MobalyticsProvider, OPGGProvider, PROVIDERS, UGGProvider } from './providers';
 
 const SETTINGS_KEY = 'openIn';
 
@@ -91,6 +91,9 @@ export class OpenBuildInBrowserModule extends WebSocketModule {
         break;
       case PROVIDERS.Lolalytics:
         provider = new LolalyticsProvider(connection, true);
+        break;
+      case PROVIDERS.UGG:
+        provider = new UGGProvider(connection, true);
         break;
     }
 
