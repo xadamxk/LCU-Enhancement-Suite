@@ -1,6 +1,8 @@
 export enum Endpoints {
   CHAMPION_SELECT_ALL_CHAMPS = '/lol-champ-select/v1/all-grid-champions',
+  CHAMPION_SELECT_CURRENT_CHAMPION = '/lol-champ-select-legacy/v1/current-champion',
   CHAT_ME = '/lol-chat/v1/me',
+  TEAM_BUILDER_CURRENT_CHAMPION = '/lol-lobby-team-builder/champ-select/v1/current-champion',
   END_OF_GAME_STATS = '/lol-end-of-game/v1/eog-stats-block',
   INVITATIONS = '/lol-lobby/v2/lobby/invitations',
   FRIEND_GROUPS = '/lol-chat/v1/friend-groups',
