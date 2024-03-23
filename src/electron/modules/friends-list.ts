@@ -1,11 +1,7 @@
 import { MenuItem, Menu, dialog } from 'electron';
-import { stat, statSync } from 'fs';
-import { LeagueEvent } from '../../connector';
 import { WebSocketModule } from '../api';
 import { connection } from '../core';
-import { Endpoints, PlayerResponse } from '../enums';
 import { Friend, FriendRequest } from '../models';
-import { ReadyCheckSubscription } from '../subscriptions';
 
 const fs = require('fs');
 
@@ -46,12 +42,12 @@ export class FriendsListModule extends WebSocketModule {
     return this.updateMenu(menuItem);
   }
 
-  async refresh(event: LeagueEvent = null): Promise<void> {
+  async refresh(): Promise<void> {
     //
   }
 
   private async importFriends(): Promise<void> {
-    const importDialog =  await dialog.showOpenDialog({
+    const importDialog = await dialog.showOpenDialog({
       defaultPath: process.env.HOME,
       filters: [{
         name: 'JSON', extensions: ['json']
@@ -83,7 +79,7 @@ export class FriendsListModule extends WebSocketModule {
     // Loop friends object, send request
     for (const friend of importedFriends) {
       friend['direction'] = 'out';
-      const statusCode = await this.addFriend({...friend});
+      const statusCode = await this.addFriend({ ...friend });
       switch (statusCode) {
         case 204: successfulFriends.push(friend);
           break;

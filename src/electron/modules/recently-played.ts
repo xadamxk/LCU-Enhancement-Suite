@@ -59,7 +59,7 @@ export class RecentlyPlayedModule extends WebSocketModule {
       // reverse order of games to show most recent game first
       Object.keys(summonersByGame).reverse().forEach((gameId, index, reversedGameIds) => {
         // append each unique player in game
-        summonersByGame[gameId].forEach(async(summoner: RecentlyPlayedSummoner) => {
+        summonersByGame[gameId].forEach((summoner: RecentlyPlayedSummoner) => {
           const championNameMatch = champions.filter((champion: CSChampion) => {
             return champion.id == summoner.championId;
           });
