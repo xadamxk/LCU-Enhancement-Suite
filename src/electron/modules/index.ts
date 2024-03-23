@@ -6,7 +6,6 @@ import { RecentlyPlayedModule } from './recently-played';
 import { FriendsListModule } from './friends-list';
 import { SpoofProfileModule } from './spoof-profile';
 import { OpenBuildInBrowserModule } from './open-build-in-browser/open-build-in-browser';
-// import { EndOfGameListenerModule } from './eog-listener';
 
 export * from './auto-accept-queue';
 export * from './disenchant-loot';
@@ -15,7 +14,6 @@ export * from './recently-played';
 export * from './friends-list';
 export * from './spoof-profile';
 export * from './open-build-in-browser/open-build-in-browser';
-// export * from './eog-listener';
 
 const modules: Module[] = [
   new RecentlyPlayedModule(),
@@ -25,7 +23,6 @@ const modules: Module[] = [
   new SpoofProfileModule(),
   new AutoAcceptQueueModule(),
   new OpenBuildInBrowserModule()
-  // new EndOfGameListenerModule()
 ];
 
 export { modules };

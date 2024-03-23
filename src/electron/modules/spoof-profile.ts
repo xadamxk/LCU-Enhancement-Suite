@@ -1,11 +1,7 @@
-import { MenuItem, Menu, dialog } from 'electron';
-import { LeagueEvent } from '../../connector';
+import { MenuItem, Menu } from 'electron';
 import { WebSocketModule } from '../api';
 import { connection } from '../core';
-// import { connection } from '../core';
-// import { Endpoints } from '../enums';
 import { LOLChatIcon, LOLChatRank } from '../models';
-// import {  } from '../subscriptions';
 
 
 export class SpoofProfileModule extends WebSocketModule {
@@ -87,7 +83,7 @@ export class SpoofProfileModule extends WebSocketModule {
 
     /* Spoof Profile Icon */
     const icons = {
-      'Unreleased':[
+      'Unreleased': [
         {
           name: 'Eternal Reign',
           value: 3504
@@ -143,7 +139,7 @@ export class SpoofProfileModule extends WebSocketModule {
           value: 774
         }
       ],
-      'Misc':[
+      'Misc': [
         {
           name: 'Placeholder Icon',
           value: 501
@@ -179,11 +175,11 @@ export class SpoofProfileModule extends WebSocketModule {
     /* Spoof Profile Icon */
     const availabilitiesSubmenu = new Menu();
     const availabilities = [
-      {'value':'away', 'display': 'Away'},
+      { 'value': 'away', 'display': 'Away' },
       // {'value':'dnd', 'display': 'In Game'}, // Doesn't work with availability alone
-      {'value':'chat', 'display': 'Online'},
-      {'value':'offline', 'display': 'Offline'},
-      {'value':'mobile', 'display': 'Mobile'}
+      { 'value': 'chat', 'display': 'Online' },
+      { 'value': 'offline', 'display': 'Offline' },
+      { 'value': 'mobile', 'display': 'Mobile' }
     ];
     this.selectedAvailability = this.storage.get('availability', availabilities[1]);
     this.spoofAvailability(this.selectedAvailability['value']);
@@ -219,12 +215,12 @@ export class SpoofProfileModule extends WebSocketModule {
     return this.updateMenu(menuItem);
   }
 
-  async refresh(event: LeagueEvent = null): Promise<void> {
+  async refresh(): Promise<void> {
     //
   }
 
   async spoofAvailability(availability: string): Promise<void> {
-    const availityBody = {'availability': availability};
+    const availityBody = { 'availability': availability };
 
     await connection.changeAvailability(availityBody);
   }
@@ -249,7 +245,7 @@ export class SpoofProfileModule extends WebSocketModule {
   }
 
   async spoofIcon(iconId: number): Promise<void> {
-    const iconBody = new LOLChatIcon({icon: iconId});
+    const iconBody = new LOLChatIcon({ icon: iconId });
 
     await connection.changeIcon(iconBody);
   }
