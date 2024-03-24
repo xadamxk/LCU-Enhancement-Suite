@@ -8,7 +8,7 @@ import { GameflowPhaseSubscription } from '../subscriptions';
 
 export class RecentlyPlayedModule extends WebSocketModule {
   id = 'RecentlyPlayed';
-  recentSummonerLimit = 20;
+  recentSummonerLimit = 18;
 
   async register(): Promise<void> {
     // TODO: Add subscription for call when client initially loads friends (ie. signing into different account)
@@ -58,22 +58,43 @@ export class RecentlyPlayedModule extends WebSocketModule {
 
       // reverse order of games to show most recent game first
       Object.keys(summonersByGame).reverse().forEach((gameId, index, reversedGameIds) => {
+        const summoners: RecentlyPlayedSummoner[] = summonersByGame[gameId];
+        submenu.append(new MenuItem({
+          label: `Game #${gameId}`,
+          sublabel: `${summoners[0].gameCreationDate.fromNow()}`,
+          enabled: false
+        }));
+        let previousTeamId = -1;
         // append each unique player in game
-        summonersByGame[gameId].forEach((summoner: RecentlyPlayedSummoner) => {
+        const sortedSummoners = summoners.sort((summonerA: RecentlyPlayedSummoner, summonerB: RecentlyPlayedSummoner) => summonerA.teamId - summonerB.teamId);
+        sortedSummoners.forEach((summoner: RecentlyPlayedSummoner) => {
           const championNameMatch = champions.filter((champion: CSChampion) => {
             return champion.id == summoner.championId;
           });
+          if (previousTeamId !== summoner.teamId) {
+            previousTeamId = summoner.teamId;
+            const currentSummonerTeamId = summoner.teamId;
+            const currentSummonerTeammates = sortedSummoners.filter((summoner: RecentlyPlayedSummoner) => summoner.teamId === currentSummonerTeamId);
+            const teamLabel = currentSummonerTeammates.length === 5 ? 'Enemy' : 'Ally';
+            const sideName = summoner.teamId === 100 ? 'Blue' : 'Red';
+            submenu.append(new MenuItem({
+              label: `${teamLabel} Team`,
+              sublabel: `${sideName} Side`,
+              click: async() => {
+                for (const teammate of currentSummonerTeammates) {
+                  await connection.inviteSummoners(teammate.summonerId);
+                }
+              }
+            }));
+          }
 
           const championName = championNameMatch ? championNameMatch[0].name : 'N/A';
 
           submenu.append(new MenuItem({
-            label: `${summoner.summonerName} (${championName})`,
-            sublabel: `Played: ${summoner.gameCreationDate.fromNow()}`,
+            label: `  ${championName}`,
+            sublabel: `  ${summoner.summonerName}`,
             click: async() => {
-              const response = await connection.inviteSummoners(summoner.summonerId);
-              console.log(response.status);
-              const json = await response.json();
-              console.log(json);
+              await connection.inviteSummoners(summoner.summonerId);
             }
           }));
         });

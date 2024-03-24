@@ -32,6 +32,7 @@ declare module '../../connector' {
     getCurrentVersion(): Promise<Response>;
     getChampionIcon(championId: number): Promise<Response>;
     getChampionSelectChampions(): Promise<Response>;
+    getLobbyV2Lobby(): Promise<Response>;
   }
 }
 
@@ -63,11 +64,11 @@ LeagueConnection.prototype.forgeLoot = async function(this, recipeName, componen
   return await this.post(`${Endpoints.LOOT_RECIPES}/${recipeName}/craft?repeat=${repeatCount}`, componentLootIds);
 };
 
-LeagueConnection.prototype.getBalance = async function(this) : Promise<Response> {
+LeagueConnection.prototype.getBalance = async function(this): Promise<Response> {
   return await this.get(Endpoints.WALLET);
 };
 
-LeagueConnection.prototype.getFriends = async function(this) : Promise<Response> {
+LeagueConnection.prototype.getFriends = async function(this): Promise<Response> {
   return await this.get(Endpoints.FRIENDS);
 };
 
@@ -97,4 +98,8 @@ LeagueConnection.prototype.getChampionIcon = async function(championId): Promise
 
 LeagueConnection.prototype.getChampionSelectChampions = async function(): Promise<Response> {
   return await this.get(Endpoints.CHAMPION_SELECT_ALL_CHAMPS);
+};
+
+LeagueConnection.prototype.getLobbyV2Lobby = async function(): Promise<Response> {
+  return await this.get(Endpoints.LOBBY);
 };

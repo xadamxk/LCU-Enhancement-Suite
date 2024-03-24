@@ -21,8 +21,8 @@ const modules: Module[] = [
   new DisenchantLootModule(),
   new FriendsListModule(),
   new SpoofProfileModule(),
-  new AutoAcceptQueueModule(),
-  new OpenBuildInBrowserModule()
+  new OpenBuildInBrowserModule(),
+  new AutoAcceptQueueModule()
 ];
 
 export { modules };

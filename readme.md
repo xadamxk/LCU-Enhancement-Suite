@@ -6,13 +6,18 @@ Running as a background application, found in your system tray, LCU Enhancement 
 
 ![Feature Highlight GIF](https://github.com/xadamxk/LCU-Enhancement-Suite/blob/master/images/LCU-Enhancement-Suite-1.0.3.gif?raw=true)
 
+## Download
+[Download Link](https://github.com/xadamxk/LCU-Enhancement-Suite/releases/latest)
+
 ## Features
-- Open recommended build in browser during champion select (ARAM ONLY - SR coming soon) for the following providers:
+- Open recommended build in browser during champion select (SR & ARAM ONLY) for the following providers:
      - Blitz.gg
      - Lolalytics
      - Mobalytics
      - Op.gg
-- Quick invite recently played players
+     - U.gg
+     <details><summary>Screenshot</summary><img src="./images/OpenBuildIn-1.2.1.png" title="Open Build In"  /></details>
+- Quick invite recently played players<details><summary>Screenshot</summary><img src="./images/RecentlyPlayed-1.2.1.png" title="Recently Played"  /></details>
 - Quick invite players by friend group
 - Advanced loot disenchantment for owned & unowned resources including:
      - Champion Capsules
@@ -27,46 +32,11 @@ Running as a background application, found in your system tray, LCU Enhancement 
      - Availability (Friends List)
      - Icon (Friends List)
      - Rank (Friends List)
+     <details><summary>Screenshot</summary><img src="./images/SpoofProfileIcon-1.2.1.png" title="Spoof Profile Icon" /><img src="./images/SpoofProfileRank-1.2.1.png" title="Spoof Profile Rank" /></details>
 - Auto accept queue prompt
 
-## Download
-[Download Link](https://github.com/xadamxk/LCU-Enhancement-Suite/releases/latest)
 
 
-# Development
-### Install Dependencies
-```
-npm i
-```
-### Running the Application
-#### Serving Angular Live
-This builds the Angular and Electron portions of the code and runs the Electron application. The Angular portion of the code is served live (i.e. from a server). Changes to both the Angular portion and the Electron portion of the code are watched and will trigger the code to be recompiled. When the Angular portion of the code is recompiled, any open Electron windows will be reloaded. When the Electron portion of the code is recompiled, a new Electron process will be spawned.
-```
-npm run start
-```
-#### Serving Angular Locally
-This builds the Angular and Electron portions of the code and runs the Electron application. The Angular portion of the code is served locally (i.e. from a file). This is how the application would be ran once built into an executable.
-```
-npm run build[:<dev|prod>]
-npm run electron -- ./
-```
-#### Skipping Angular Build
-If the Angular portion of the code has not changed, or if the Angular window is not being displayed, then (re)compiling the Angular portion may be skipped.
-```
-npm run electron:build
-npm run electron -- ./
-```
-Alternatively, changes to the Electron portion of the code can be watched. When the Electron portion of the code is recompiled, a new Electron process will be spawned.
-```
-npm run electron:watch
-```
-### Building Executable
-```
-npm run package
-```
-
-### CI/CD Pipeline
-Commits trigger CodeQL analysis that build the application and add a status check to pull requests. Commits to master with a version tag (format v#.#.#) trigger the release job to build and create a release draft. The release draft requires manual review.
 
 ## Riot Games
 
