@@ -5,6 +5,7 @@ export enum Endpoints {
   TEAM_BUILDER_CURRENT_CHAMPION = '/lol-lobby-team-builder/champ-select/v1/current-champion',
   END_OF_GAME_STATS = '/lol-end-of-game/v1/eog-stats-block',
   INVITATIONS = '/lol-lobby/v2/lobby/invitations',
+  LOBBY = '/lol-lobby/v2/lobby',
   FRIEND_GROUPS = '/lol-chat/v1/friend-groups',
   FRIENDS = '/lol-chat/v1/friends',
   FRIEND_REQUESTS = '/lol-chat/v1/friend-requests',

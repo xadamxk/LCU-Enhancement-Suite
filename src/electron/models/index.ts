@@ -12,3 +12,4 @@ export * from './eog-player';
 export * from './eog-stats';
 export * from './eog-team';
 export * from './cs-champion';
+export * from './lollobby-lobby';
