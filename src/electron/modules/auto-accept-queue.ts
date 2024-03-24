@@ -6,24 +6,28 @@ import { Endpoints, PlayerResponse } from '../enums';
 import { ReadyCheck } from '../models';
 import { ReadyCheckSubscription } from '../subscriptions';
 
+const SETTINGS_KEY = 'isAutoAcceptQueueEnabled';
+
 export class AutoAcceptQueueModule extends WebSocketModule {
   id = 'AutoAcceptQueue';
-  checked = this.storage.get('checked', true);
+  enabled = this.storage.get(SETTINGS_KEY, false);
 
   async register(): Promise<void> {
     connection.addSubscription(
       new ReadyCheckSubscription((event) => {
-        this.refresh(event);
+        if (this.storage.get(SETTINGS_KEY)) {
+          this.refresh(event);
+        }
       })
     );
 
     const menuItem = new MenuItem({
       label: 'Auto-Accept Queue',
       type: 'checkbox',
-      checked: this.checked,
+      checked: this.enabled,
       click: (menuItem) => {
-        this.checked = menuItem.checked = !this.checked;
-        this.storage.set('checked', this.checked);
+        this.enabled = menuItem.checked = !this.enabled;
+        this.storage.set(SETTINGS_KEY, this.enabled);
       }
     });
 
@@ -34,10 +38,7 @@ export class AutoAcceptQueueModule extends WebSocketModule {
     const readyCheck = new ReadyCheck(event.data);
 
     if (readyCheck.playerResponse === PlayerResponse.NONE) {
-      const response = await connection.post(Endpoints.READY_CHECK_ACCEPT);
-      console.log(response.status);
-      const json = await response.json();
-      console.log(json);
+      await connection.post(Endpoints.READY_CHECK_ACCEPT);
     }
   }
 }
