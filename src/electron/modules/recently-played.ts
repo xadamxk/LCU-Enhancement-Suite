@@ -114,9 +114,4 @@ export class RecentlyPlayedModule extends WebSocketModule {
       return this.updateMenu(menuItem);
     }
   }
-
-  private async getChampionIcon(championId: number): Promise<string> {
-    const championIcon = await connection.getChampionIcon(championId);
-    return championIcon.url;
-  }
 }
